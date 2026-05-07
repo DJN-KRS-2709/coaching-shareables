@@ -476,8 +476,8 @@ section.skipped { display: none; }
   </div>
 </section>
 
-<!-- 4: Three Modes + Autonomy Levels -->
-<section data-title="Modi & Autonomie-Level">
+<!-- 4: Three Modes -->
+<section data-title="Drei Modi">
   <div class="inner">
     <div class="demo-tag tag-lecture">AI Value Archetypes</div>
     <h2>Drei Modi</h2>
@@ -499,18 +499,51 @@ section.skipped { display: none; }
         <div class="card-desc"><strong>KI analysiert.</strong> Gro&szlig;e Mengen in Minuten. Retro-Muster, Velocity-Trends, Health Check &uuml;ber 6 Sprints.</div>
       </div>
     </div>
-    <h3 style="margin-top:36px; margin-bottom:16px; font-size:18px;">Autonomie-Level</h3>
-    <p style="margin-bottom:16px; color:#8899bb;">F&uuml;r <em>jeden</em> der drei Modi gilt: Ihr startet manuell und gebt schrittweise mehr Autonomie.</p>
-    <div class="arc-flow">
-      <div class="arc-node" style="background:#0c2244; min-width:120px;">L0: Manuell</div>
-      <div class="arc-arrow">&rarr;</div>
-      <div class="arc-node" style="background:#1241B0; min-width:150px;">L1: Human-in-the-loop</div>
-      <div class="arc-arrow">&rarr;</div>
-      <div class="arc-node" style="background:#1a50c0; min-width:130px;">L2: Delegiert</div>
-      <div class="arc-arrow">&rarr;</div>
-      <div class="arc-node active-node" style="background:#2563eb; min-width:150px;">L3: Autonomer Agent</div>
+    <p style="text-align:center; margin-top:20px; color:#8899bb; font-size:14px;">Gilt f&uuml;r alle drei: Je mehr Autonomie ihr gebt, desto mehr <strong>Verantwortung</strong> &uuml;bernehmt ihr f&uuml;r Qualit&auml;tssicherung.</p>
+  </div>
+</section>
+
+<!-- 4b: The Agent Spectrum -->
+<section data-title="The Agent Spectrum">
+  <div class="inner">
+    <div class="demo-tag tag-lecture">Autonomie-Level</div>
+    <h2>The Agent Spectrum</h2>
+    <p style="margin-bottom:8px; color:#8899bb;">Mehr Autonomie = mehr operative Verantwortung auf eurer Seite.</p>
+    <p style="margin-bottom:28px; color:#8899bb; font-size:14px;">Gilt f&uuml;r <em>jeden</em> der drei Modi. Ihr startet bei 0 und arbeitet euch hoch.</p>
+    <div class="waypoints">
+      <div class="waypoint">
+        <div class="waypoint-num" style="background:#0c2244;">0</div>
+        <div class="waypoint-text">
+          <div class="wt-title">Reactive <span style="color:#8899bb; font-weight:400;">(No Autonomy)</span></div>
+          <div class="wt-desc"><strong>SM verantwortet:</strong> Prompt-Qualit&auml;t und Ergebnis-Pr&uuml;fung. Jeder Prompt einzeln, jede Antwort validiert.</div>
+        </div>
+      </div>
+      <div class="waypoint">
+        <div class="waypoint-num" style="background:#1241B0;">1</div>
+        <div class="waypoint-text">
+          <div class="wt-title">Function-Calling <span style="color:#8899bb; font-weight:400;">(Assisted Autonomy)</span></div>
+          <div class="wt-desc"><strong>SM verantwortet:</strong> Tool-Auswahl und Fallback-Verhalten. Claude nutzt MCP, aber ihr entscheidet welche Daten und wann.</div>
+        </div>
+      </div>
+      <div class="waypoint">
+        <div class="waypoint-num" style="background:#1a50c0;">2</div>
+        <div class="waypoint-text">
+          <div class="wt-title">Semi-Autonomous <span style="color:#8899bb; font-weight:400;">(Human-in-the-Loop)</span></div>
+          <div class="wt-desc"><strong>SM verantwortet:</strong> Checkpoint-Design und Eskalationspfade. Claude arbeitet eigenst&auml;ndig, ihr definiert wo Pr&uuml;fpunkte liegen.</div>
+        </div>
+      </div>
+      <div class="waypoint">
+        <div class="waypoint-num" style="background:#2563eb;">3</div>
+        <div class="waypoint-text">
+          <div class="wt-title">Fully Autonomous <span style="color:#8899bb; font-weight:400;">(Goal-Driven)</span></div>
+          <div class="wt-desc"><strong>SM verantwortet:</strong> Vertrauen, Rollback und Nachvollziehbarkeit. Agent l&auml;uft eigenst&auml;ndig &mdash; ihr sorgt daf&uuml;r, dass ihr das Ergebnis pr&uuml;fen k&ouml;nnt.</div>
+        </div>
+      </div>
     </div>
-    <p style="text-align:center; margin-top:16px; color:#8899bb; font-size:14px;"><strong>L0:</strong> Ihr tippt jeden Prompt &rarr; <strong>L1:</strong> Ihr validiert jeden Schritt &rarr; <strong>L2:</strong> Ihr pr&uuml;ft nur das Ergebnis &rarr; <strong>L3:</strong> Agent arbeitet eigenst&auml;ndig mit Tools (MCP)</p>
+    <div class="lab-tip" style="margin-top:20px;">
+      <div class="lab-tip-label">Harbita heute</div>
+      <div class="lab-tip-text">Sprint Health Check Agent = Level 3. Hat bei Level 0 angefangen (einzelne Prompts), sich &uuml;ber L1 und L2 hochgearbeitet. Das hat Monate gedauert &mdash; und das ist der richtige Weg.</div>
+    </div>
   </div>
 </section>
 
