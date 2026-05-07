@@ -510,7 +510,24 @@ section.skipped { display: none; }
       <div class="arc-arrow">&rarr;</div>
       <div class="arc-node active-node" style="background:#2563eb; min-width:160px; font-size:11px; padding:12px 8px; text-align:center; line-height:1.4;"><strong style="font-size:13px;">3</strong><br>Fully Autonomous</div>
     </div>
-    <p style="text-align:center; margin-top:14px; color:#8899bb; font-size:13px;">No Autonomy &rarr; Assisted Autonomy &rarr; Human-in-the-Loop &rarr; Goal-Driven</p>
+    <div class="cards-grid" style="grid-template-columns: repeat(4, 1fr); margin-top:20px; gap:12px;">
+      <div style="text-align:center; font-size:12px; color:#8899bb; line-height:1.5;">
+        <div style="color:#c8d6e5; font-weight:600; margin-bottom:4px;">No Autonomy</div>
+        Ihr tippt jeden Prompt. Pr&uuml;ft jede Antwort manuell.
+      </div>
+      <div style="text-align:center; font-size:12px; color:#8899bb; line-height:1.5;">
+        <div style="color:#c8d6e5; font-weight:600; margin-bottom:4px;">Assisted Autonomy</div>
+        Claude nutzt Tools (MCP), aber ihr entscheidet wann und welche.
+      </div>
+      <div style="text-align:center; font-size:12px; color:#8899bb; line-height:1.5;">
+        <div style="color:#c8d6e5; font-weight:600; margin-bottom:4px;">Human-in-the-Loop</div>
+        Claude arbeitet eigenst&auml;ndig. Ihr definiert Checkpoints und pr&uuml;ft an definierten Stellen.
+      </div>
+      <div style="text-align:center; font-size:12px; color:#8899bb; line-height:1.5;">
+        <div style="color:#c8d6e5; font-weight:600; margin-bottom:4px;">Goal-Driven</div>
+        Ihr gebt ein Ziel. Agent arbeitet autonom mit Tools und liefert fertiges Artefakt.
+      </div>
+    </div>
   </div>
 </section>
 
