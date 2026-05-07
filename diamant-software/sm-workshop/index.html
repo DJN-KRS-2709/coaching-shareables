@@ -500,37 +500,17 @@ section.skipped { display: none; }
       </div>
     </div>
     <h3 style="margin-top:32px; margin-bottom:12px; font-size:17px; color:#c8d6e5;">The Agent Spectrum</h3>
-    <p style="margin-bottom:16px; color:#8899bb; font-size:14px;">Mehr Autonomie = mehr operative Verantwortung. Gilt f&uuml;r jeden der drei Modi.</p>
-    <div class="waypoints">
-      <div class="waypoint">
-        <div class="waypoint-num" style="background:#0c2244;">0</div>
-        <div class="waypoint-text">
-          <div class="wt-title">Reactive <span style="color:#8899bb; font-weight:400;">(No Autonomy)</span></div>
-          <div class="wt-desc">Ihr verantwortet Prompt-Qualit&auml;t und Ergebnis-Pr&uuml;fung.</div>
-        </div>
-      </div>
-      <div class="waypoint">
-        <div class="waypoint-num" style="background:#1241B0;">1</div>
-        <div class="waypoint-text">
-          <div class="wt-title">Function-Calling <span style="color:#8899bb; font-weight:400;">(Assisted Autonomy)</span></div>
-          <div class="wt-desc">Ihr verantwortet Tool-Auswahl und Fallback-Verhalten.</div>
-        </div>
-      </div>
-      <div class="waypoint">
-        <div class="waypoint-num" style="background:#1a50c0;">2</div>
-        <div class="waypoint-text">
-          <div class="wt-title">Semi-Autonomous <span style="color:#8899bb; font-weight:400;">(Human-in-the-Loop)</span></div>
-          <div class="wt-desc">Ihr verantwortet Checkpoint-Design und Eskalationspfade.</div>
-        </div>
-      </div>
-      <div class="waypoint">
-        <div class="waypoint-num" style="background:#2563eb;">3</div>
-        <div class="waypoint-text">
-          <div class="wt-title">Fully Autonomous <span style="color:#8899bb; font-weight:400;">(Goal-Driven)</span></div>
-          <div class="wt-desc">Ihr verantwortet Vertrauen, Rollback und Nachvollziehbarkeit.</div>
-        </div>
-      </div>
+    <p style="margin-bottom:20px; color:#8899bb; font-size:14px;">Mehr Autonomie = mehr operative Verantwortung. Gilt f&uuml;r jeden der drei Modi.</p>
+    <div class="arc-flow">
+      <div class="arc-node" style="background:#0c2244; min-width:160px; font-size:11px; padding:12px 8px; text-align:center; line-height:1.4;"><strong style="font-size:13px;">0</strong><br>Reactive</div>
+      <div class="arc-arrow">&rarr;</div>
+      <div class="arc-node" style="background:#1241B0; min-width:160px; font-size:11px; padding:12px 8px; text-align:center; line-height:1.4;"><strong style="font-size:13px;">1</strong><br>Function-Calling</div>
+      <div class="arc-arrow">&rarr;</div>
+      <div class="arc-node" style="background:#1a50c0; min-width:160px; font-size:11px; padding:12px 8px; text-align:center; line-height:1.4;"><strong style="font-size:13px;">2</strong><br>Semi-Autonomous</div>
+      <div class="arc-arrow">&rarr;</div>
+      <div class="arc-node active-node" style="background:#2563eb; min-width:160px; font-size:11px; padding:12px 8px; text-align:center; line-height:1.4;"><strong style="font-size:13px;">3</strong><br>Fully Autonomous</div>
     </div>
+    <p style="text-align:center; margin-top:14px; color:#8899bb; font-size:13px;">No Autonomy &rarr; Assisted Autonomy &rarr; Human-in-the-Loop &rarr; Goal-Driven</p>
   </div>
 </section>
 
