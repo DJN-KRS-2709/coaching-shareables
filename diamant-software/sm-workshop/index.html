@@ -479,37 +479,38 @@ section.skipped { display: none; }
 <!-- 4: Three Modes + Autonomy Levels -->
 <section data-title="Modi & Autonomie-Level">
   <div class="inner">
-    <div class="demo-tag tag-lecture">Rahmenwerk</div>
-    <h2>Vier Modi</h2>
-    <p style="margin-bottom:20px;">Die ersten drei kennt ihr. Neu: <em>Agent</em> als eigenst&auml;ndiger vierter Modus.</p>
-    <div class="cards-grid" style="grid-template-columns: repeat(2, 1fr);">
-      <div class="card-item" style="--card-accent:#58a6ff;">
-        <div class="card-icon">&#x1F91D;</div>
+    <div class="demo-tag tag-lecture">AI Value Archetypes</div>
+    <h2>Drei Modi</h2>
+    <p style="margin-bottom:20px;">Was KI f&uuml;r euch tut &mdash; drei fundamental verschiedene Einsatzarten:</p>
+    <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="card-item" style="--card-accent:#60a5fa;">
+        <div class="card-icon">&#x1F4A1;</div>
         <div class="card-title">Partner</div>
-        <div class="card-desc">KI denkt mit euch. Prompt &rarr; Antwort &rarr; Iteration. Retro vorbereiten, Impediment analysieren.</div>
+        <div class="card-desc"><strong>KI denkt mit euch.</strong> Ihr steuert, KI assistiert. Retro vorbereiten, Impediment analysieren, Coaching-Gespr&auml;ch durchdenken.</div>
       </div>
-      <div class="card-item" style="--card-accent:#34d399;">
-        <div class="card-icon">&#x2699;</div>
+      <div class="card-item" style="--card-accent:#f59e0b;">
+        <div class="card-icon">&#x26A1;</div>
         <div class="card-title">Automator</div>
-        <div class="card-desc">KI erledigt delegierte Aufgaben. Prompt &rarr; fertiges Ergebnis. Sprint-Reports, Status-Updates.</div>
+        <div class="card-desc"><strong>KI erledigt.</strong> Routineaufgaben die niemand vermisst. Sprint-Reports, Status-Updates, Metriken zusammenfassen.</div>
       </div>
-      <div class="card-item" style="--card-accent:#d29922;">
+      <div class="card-item" style="--card-accent:#60a5fa;">
         <div class="card-icon">&#x1F50D;</div>
         <div class="card-title">Oracle</div>
-        <div class="card-desc">KI analysiert gro&szlig;e Datenmengen. Daten rein &rarr; Insights raus. Velocity-Muster, Retro-Patterns.</div>
-      </div>
-      <div class="card-item" style="--card-accent:#ec4899;">
-        <div class="card-icon">&#x1F916;</div>
-        <div class="card-title">Agent</div>
-        <div class="card-desc">KI arbeitet autonom mit Tools. Ziel vorgeben &rarr; Agent verbindet sich mit Azure DevOps, analysiert, liefert Artefakt ab.</div>
+        <div class="card-desc"><strong>KI analysiert.</strong> Gro&szlig;e Mengen in Minuten. Retro-Muster, Velocity-Trends, Health Check &uuml;ber 6 Sprints.</div>
       </div>
     </div>
-    <div class="evidence-cards" style="margin-top:24px;">
-      <div class="evidence-card" style="border-color:rgba(236,72,153,0.3);">
-        <div class="ec-label" style="color:#f472b6;">Der Unterschied</div>
-        <div class="ec-text">Partner, Automator, Oracle = <strong>Prompt rein, Antwort raus.</strong><br>Agent = <strong>Ziel vorgeben, Agent f&uuml;hrt mehrstufigen Workflow eigenst&auml;ndig aus</strong> &mdash; verbindet sich mit externen Systemen, trifft Zwischenentscheidungen, liefert fertiges Artefakt.</div>
-      </div>
+    <h3 style="margin-top:36px; margin-bottom:16px; font-size:18px;">Autonomie-Level</h3>
+    <p style="margin-bottom:16px; color:#8899bb;">F&uuml;r <em>jeden</em> der drei Modi gilt: Ihr startet manuell und gebt schrittweise mehr Autonomie.</p>
+    <div class="arc-flow">
+      <div class="arc-node" style="background:#0c2244; min-width:120px;">L0: Manuell</div>
+      <div class="arc-arrow">&rarr;</div>
+      <div class="arc-node" style="background:#1241B0; min-width:150px;">L1: Human-in-the-loop</div>
+      <div class="arc-arrow">&rarr;</div>
+      <div class="arc-node" style="background:#1a50c0; min-width:130px;">L2: Delegiert</div>
+      <div class="arc-arrow">&rarr;</div>
+      <div class="arc-node active-node" style="background:#2563eb; min-width:150px;">L3: Autonomer Agent</div>
     </div>
+    <p style="text-align:center; margin-top:16px; color:#8899bb; font-size:14px;"><strong>L0:</strong> Ihr tippt jeden Prompt &rarr; <strong>L1:</strong> Ihr validiert jeden Schritt &rarr; <strong>L2:</strong> Ihr pr&uuml;ft nur das Ergebnis &rarr; <strong>L3:</strong> Agent arbeitet eigenst&auml;ndig mit Tools (MCP)</p>
   </div>
 </section>
 
