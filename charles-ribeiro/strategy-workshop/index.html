@@ -956,97 +956,53 @@ body {
           <button class="btn" id="toggleBoardDeck" onclick="set1pagerFormat('board')" style="font-size:12px;padding:6px 14px;">5-Slide Board Deck</button>
           <button class="btn" id="toggleBMM" onclick="set1pagerFormat('bmm')" style="font-size:12px;padding:6px 14px;">Bet / Moat / Margin</button>
         </div>
+        <div id="formatSubhead" style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">5-slide structure — boards read slides 1 and 5</div>
 
-        <!-- Board Deck format -->
-        <div id="format-board">
-          <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">5-slide structure — boards read slides 1 and 5</div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Slide 1 — Problem + Opportunity</label>
-            <div class="hint">Customer pain in one sentence, quantified. Why now, why us.</div>
+        <div id="opFieldsContainer">
+          <div class="field" id="fld-opBet" style="margin-bottom: 12px;">
+            <label id="lbl-opBet">Slide 1 — Problem + Opportunity</label>
+            <textarea id="opBet">An AI agent that surfaces cost-variance opportunities in clinical surgical supplies for hospital supply chain leaders. Sold as the differentiator inside our Enterprise platform tier — the agent is the reason the platform gets bought, not a separate line item. Why now: post-merger, we are the only player covering the holistic 3-company life cycle (contracting + inventory + implants), and that window closes in 18+ months as Epic/Cerner build supplier APIs of their own. First customers asked "how much?" the day they saw the demo. We move now.</textarea>
+            <div class="hint" id="hint-opBet">Customer pain in one sentence, quantified. Why now, why us.</div>
           </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Slide 2 — Solution + Market</label>
-            <div class="hint">What we built, defensibility, TAM/SAM/SOM. Bottoms-up first, top-down sanity check.</div>
+          <div class="field" id="fld-opMoat" style="margin-bottom: 12px;">
+            <label id="lbl-opMoat">Slide 2 — Solution + Market</label>
+            <textarea id="opMoat">(1) Workflow embedding across the holistic 3-company life cycle that no single competitor can replicate. Competitors have one slice — we have the integrated path from contract to scan to implant. (2) Data flywheel: when a recommendation is overridden, we capture WHY. Correction and Domain Context loops compound across customers — competitors see only outputs, we see reasoning. The model is replaceable; the workflow position and the override-reason data are not. TAM: ~$120M (5,000 hospitals × $24k ACV). SAM: ~$24M (1,000 hospitals in coverage). SOM Year 1: ~$360k.</textarea>
+            <div class="hint" id="hint-opMoat">What we built, defensibility, TAM/SAM/SOM. Bottoms-up first, top-down sanity check.</div>
           </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Slide 3 — Build vs. Buy + Timeline</label>
-            <div class="hint">Why build vs. buy, then the 3-horizon roadmap. Build-decision rationale up front.</div>
+          <div class="field" id="fld-opRoadmap" style="margin-bottom: 12px;">
+            <label id="lbl-opRoadmap">Slide 3 — Build vs. Buy + Timeline</label>
+            <textarea id="opRoadmap">Build decision: $800k vendor investment in PE-affiliated dev shop — build, not buy, because no off-the-shelf agent covers the 3-company life cycle integration. Q3 2026 (July conference launch): Agent #1 live with N design partners; full-platform pricing motion in market. Q4 2026: wider rollout, flywheel measurement against scored design, ship cheap-tier (Haiku) routing for the bounded operations as the funded cost-down lever. Q1 2027: ship model-abstraction layer + 50-case eval suite to make any future provider swap eval-gated and lossless. 2027: Agents #2-#4 sequenced based on Agent #1's adoption signal — we don't ship the others until #1 is proven.</textarea>
+            <div class="hint" id="hint-opRoadmap">Why build vs. buy, then the 3-horizon roadmap. Build-decision rationale up front.</div>
           </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Slide 4 — Economics</label>
-            <div class="hint">Payback months as the headline number. Pricing model, COGS, margin, bear case.</div>
-          </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Slide 5 — The Ask</label>
-            <div class="hint">What specifically does the boss need from the board? Dollar amount, headcount, decision date, what "yes" looks like vs. "not now." Don't leave the room without a decision.</div>
-          </div>
-          <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 12px;">Supporting sections (appendix / backup slides)</div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Trust + Guardrails</label>
-          </div>
-          <div class="field">
-            <label>Top 3 Risks + Responses</label>
-          </div>
-        </div>
-
-        <!-- Bet / Moat / Margin format -->
-        <div id="format-bmm" style="display:none;">
-          <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">The Bet · The Moat · The Margin — six-section AI product strategy</div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>The Bet</label>
-            <div class="hint">What are we betting on? Customer pain, why now, why us. The single sentence that justifies everything below.</div>
-          </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>The Moat</label>
-            <div class="hint">What makes this defensible? Workflow position, data flywheel, TAM/SAM/SOM. What compounds over time.</div>
-          </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>The Margin</label>
-            <div class="hint">Full economics: pricing model, COGS, margin, bear case, recoupment. The math that proves the bet.</div>
-          </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Trust + Guardrails</label>
-            <div class="hint">What constraints are in place? Clinical safety posture, data isolation, human-in-the-loop.</div>
-          </div>
-          <div class="field" style="margin-bottom: 12px;">
-            <label>Roadmap</label>
-            <div class="hint">Build vs. buy rationale, then the 3-horizon plan. What ships when, and what gates the next phase.</div>
-          </div>
-          <div class="field">
-            <label>Top 3 Risks + Responses</label>
-            <div class="hint">The three things that could kill this, and the honest mitigation for each.</div>
-          </div>
-        </div>
-
-        <!-- Shared textareas (move into active format via JS) -->
-        <div id="ta-opBet" class="field" style="margin-bottom: 12px;">
-          <textarea id="opBet">An AI agent that surfaces cost-variance opportunities in clinical surgical supplies for hospital supply chain leaders. Sold as the differentiator inside our Enterprise platform tier — the agent is the reason the platform gets bought, not a separate line item. Why now: post-merger, we are the only player covering the holistic 3-company life cycle (contracting + inventory + implants), and that window closes in 18+ months as Epic/Cerner build supplier APIs of their own. First customers asked "how much?" the day they saw the demo. We move now.</textarea>
-        </div>
-        <div id="ta-opMoat" class="field" style="margin-bottom: 12px;">
-          <textarea id="opMoat">(1) Workflow embedding across the holistic 3-company life cycle that no single competitor can replicate. Competitors have one slice — we have the integrated path from contract to scan to implant. (2) Data flywheel: when a recommendation is overridden, we capture WHY. Correction and Domain Context loops compound across customers — competitors see only outputs, we see reasoning. The model is replaceable; the workflow position and the override-reason data are not. TAM: ~$120M (5,000 hospitals × $24k ACV). SAM: ~$24M (1,000 hospitals in coverage). SOM Year 1: ~$360k.</textarea>
-        </div>
-        <div id="ta-opRoadmap" class="field" style="margin-bottom: 12px;">
-          <textarea id="opRoadmap">Build decision: $800k vendor investment in PE-affiliated dev shop — build, not buy, because no off-the-shelf agent covers the 3-company life cycle integration. Q3 2026 (July conference launch): Agent #1 live with N design partners; full-platform pricing motion in market. Q4 2026: wider rollout, flywheel measurement against scored design, ship cheap-tier (Haiku) routing for the bounded operations as the funded cost-down lever. Q1 2027: ship model-abstraction layer + 50-case eval suite to make any future provider swap eval-gated and lossless. 2027: Agents #2-#4 sequenced based on Agent #1's adoption signal — we don't ship the others until #1 is proven.</textarea>
-        </div>
-        <div id="ta-opMargin" class="field" style="margin-bottom: 12px;">
-          <textarea id="opMargin">Pricing: % of savings delivered — estimated from service-line PO data during pre-sales, billed monthly over the 12–24 month engagement. This is not a one-time saving; it's a fundamental reduction in the hospital's recurring cost base. The agent finds the savings, the RFP/negotiation process delivers them, and we bill on what's actually realized.
+          <div class="field" id="fld-opMargin" style="margin-bottom: 12px;">
+            <label id="lbl-opMargin">Slide 4 — Economics</label>
+            <textarea id="opMargin">Pricing: % of savings delivered — estimated from service-line PO data during pre-sales, billed monthly over the 12–24 month engagement. This is not a one-time saving; it's a fundamental reduction in the hospital's recurring cost base. The agent finds the savings, the RFP/negotiation process delivers them, and we bill on what's actually realized.
 
 Enterprise tier uplift covers COGS plus base margin (leadership-team buyer); outcome upside on validated standardization savings (operations team that drives the value). Both economics work; both buyers are aligned.
 
 Architecture today: Claude Sonnet via AWS Bedrock for all features — sensible v1, defensible margins. Q4 cost-down lever: route bounded operations (cost-variance, dashboards, recommendations) to Claude Haiku, keeping Sonnet for chat + governance packs. Modeled saving: ~45% COGS reduction at 60% Haiku routing.
 
 Recoupment: $800k vendor spend recouped via combined tier uplift + outcome upside; bear case (cost +50%, usage +30%, ramp -50%) modeled and survivable. Volume risk (lower surgical volumes, surgeon mobility) modeled as haircut on delivered savings.</textarea>
-        </div>
-        <div id="ta-opAsk" class="field" style="margin-bottom: 12px;">
-          <textarea id="opAsk" placeholder="What specifically does the boss need from the board? E.g.: Sign-off on $X pricing. Permission to commit to July conference launch. Budget of $Y for Q4 abstraction-layer engineering. What does 'yes' looks like vs. 'not now'? Fill this in live during the session."></textarea>
-        </div>
-        <div id="ta-opTrust" class="field" style="margin-bottom: 12px;">
-          <textarea id="opTrust">No clinical-safety surface in scope for v1 (cost-optimization only) — reduces regulatory exposure and architecture complexity. Structural guardrails enforced in code: clinical language disclaimer, statistical thresholds before surgeon-level findings surface, exclusion of in-process cases, cross-customer data isolation at the database level. Prompt-level: no cross-vendor substitution, whole-basket implant rules, surgeon anonymization on exports. Audit trail on every recommendation. Human-in-the-loop for committee-facing outputs.</textarea>
-        </div>
-        <div id="ta-opRisks" class="field">
-          <textarea id="opRisks">(1) Single-vendor lock-in: hard-coded to Claude on AWS Bedrock today, no abstraction layer. Mitigation is two-step — Bedrock makes within-gateway swaps to Llama or Mistral materially easier (engineering days, not months); Q1 2027 ships the full abstraction layer + 50-case eval suite to make swaps eval-gated.
+            <div class="hint" id="hint-opMargin">Payback months as the headline number. Pricing model, COGS, margin, bear case.</div>
+          </div>
+          <div class="field" id="fld-opAsk" style="margin-bottom: 12px;">
+            <label id="lbl-opAsk">Slide 5 — The Ask</label>
+            <textarea id="opAsk" placeholder="What specifically does the boss need from the board? E.g.: Sign-off on $X pricing. Permission to commit to July conference launch. Budget of $Y for Q4 abstraction-layer engineering. What does 'yes' look like vs. 'not now'? Fill this in live during the session."></textarea>
+            <div class="hint" id="hint-opAsk">What specifically does the boss need from the board? Dollar amount, headcount, decision date, what "yes" looks like vs. "not now." Don't leave the room without a decision.</div>
+          </div>
+          <div id="supportingDivider" style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 12px;">Supporting sections (appendix / backup slides)</div>
+          <div class="field" id="fld-opTrust" style="margin-bottom: 12px;">
+            <label id="lbl-opTrust">Trust + Guardrails</label>
+            <textarea id="opTrust">No clinical-safety surface in scope for v1 (cost-optimization only) — reduces regulatory exposure and architecture complexity. Structural guardrails enforced in code: clinical language disclaimer, statistical thresholds before surgeon-level findings surface, exclusion of in-process cases, cross-customer data isolation at the database level. Prompt-level: no cross-vendor substitution, whole-basket implant rules, surgeon anonymization on exports. Audit trail on every recommendation. Human-in-the-loop for committee-facing outputs.</textarea>
+            <div class="hint" id="hint-opTrust">What constraints are in place? Clinical safety posture, data isolation, human-in-the-loop.</div>
+          </div>
+          <div class="field" id="fld-opRisks">
+            <label id="lbl-opRisks">Top 3 Risks + Responses</label>
+            <textarea id="opRisks">(1) Single-vendor lock-in: hard-coded to Claude on AWS Bedrock today, no abstraction layer. Mitigation is two-step — Bedrock makes within-gateway swaps to Llama or Mistral materially easier (engineering days, not months); Q1 2027 ships the full abstraction layer + 50-case eval suite to make swaps eval-gated.
 (2) Volume & surgeon mobility: lower surgical volumes or surgeons moving facilities directly reduces delivered savings and our revenue (current examples: Erlanger, Inova). Mitigation: volume risk is modeled as a haircut in our pricing; % of savings means we only bill on what's actually delivered — if savings drop, our billing drops proportionally, which is honest but means we need more customers to hit the payback target.
 (3) Platform encroachment by Epic / Cerner: workflow depth + data flywheel compound while their 18+ month integration cycles run. We don't outrun them forever — we use the window to make ourselves indispensable.</textarea>
+            <div class="hint" id="hint-opRisks">The three things that could kill this, and the honest mitigation for each.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1632,46 +1588,42 @@ function escapeHtml(s) {
 // ============ 1-PAGER FORMAT TOGGLE ============
 let onepagerFormat = 'board';
 
-const boardSlots = [
-  { ta: 'ta-opBet', slot: 0 },
-  { ta: 'ta-opMoat', slot: 1 },
-  { ta: 'ta-opRoadmap', slot: 2 },
-  { ta: 'ta-opMargin', slot: 3 },
-  { ta: 'ta-opAsk', slot: 4 },
-  { ta: 'ta-opTrust', slot: 5 },
-  { ta: 'ta-opRisks', slot: 6 }
-];
-const bmmSlots = [
-  { ta: 'ta-opBet', slot: 0 },
-  { ta: 'ta-opMoat', slot: 1 },
-  { ta: 'ta-opMargin', slot: 2 },
-  { ta: 'ta-opTrust', slot: 3 },
-  { ta: 'ta-opRoadmap', slot: 4 },
-  { ta: 'ta-opRisks', slot: 5 }
-];
+const boardConfig = {
+  subhead: '5-slide structure — boards read slides 1 and 5',
+  order: ['fld-opBet', 'fld-opMoat', 'fld-opRoadmap', 'fld-opMargin', 'fld-opAsk', 'supportingDivider', 'fld-opTrust', 'fld-opRisks'],
+  labels: { opBet: 'Slide 1 — Problem + Opportunity', opMoat: 'Slide 2 — Solution + Market', opRoadmap: 'Slide 3 — Build vs. Buy + Timeline', opMargin: 'Slide 4 — Economics', opAsk: 'Slide 5 — The Ask', opTrust: 'Trust + Guardrails', opRisks: 'Top 3 Risks + Responses' },
+  hints: { opBet: 'Customer pain in one sentence, quantified. Why now, why us.', opMoat: 'What we built, defensibility, TAM/SAM/SOM. Bottoms-up first, top-down sanity check.', opRoadmap: 'Why build vs. buy, then the 3-horizon roadmap. Build-decision rationale up front.', opMargin: 'Payback months as the headline number. Pricing model, COGS, margin, bear case.', opAsk: 'What specifically does the boss need from the board? Dollar amount, headcount, decision date.', opTrust: 'What constraints are in place? Clinical safety posture, data isolation, human-in-the-loop.', opRisks: 'The three things that could kill this, and the honest mitigation for each.' }
+};
+const bmmConfig = {
+  subhead: 'The Bet · The Moat · The Margin — six-section AI product strategy',
+  order: ['fld-opBet', 'fld-opMoat', 'fld-opMargin', 'fld-opTrust', 'fld-opRoadmap', 'fld-opRisks'],
+  labels: { opBet: 'The Bet', opMoat: 'The Moat', opMargin: 'The Margin', opTrust: 'Trust + Guardrails', opRoadmap: 'Roadmap', opRisks: 'Top 3 Risks + Responses' },
+  hints: { opBet: 'What are we betting on? Customer pain, why now, why us. The single sentence that justifies everything below.', opMoat: 'What makes this defensible? Workflow position, data flywheel, TAM/SAM/SOM. What compounds over time.', opMargin: 'Full economics: pricing model, COGS, margin, bear case, recoupment. The math that proves the bet.', opTrust: 'What constraints are in place? Clinical safety posture, data isolation, human-in-the-loop.', opRoadmap: 'Build vs. buy rationale, then the 3-horizon plan. What ships when, and what gates the next phase.', opRisks: 'The three things that could kill this, and the honest mitigation for each.' }
+};
 
 function set1pagerFormat(fmt) {
   onepagerFormat = fmt;
-  $('format-board').style.display = fmt === 'board' ? '' : 'none';
-  $('format-bmm').style.display = fmt === 'bmm' ? '' : 'none';
-  $('preview-board').style.display = fmt === 'board' ? '' : 'none';
-  $('preview-bmm').style.display = fmt === 'bmm' ? '' : 'none';
   $('toggleBoardDeck').classList.toggle('primary', fmt === 'board');
   $('toggleBMM').classList.toggle('primary', fmt === 'bmm');
+  $('preview-board').style.display = fmt === 'board' ? '' : 'none';
+  $('preview-bmm').style.display = fmt === 'bmm' ? '' : 'none';
 
-  const container = fmt === 'board' ? $('format-board') : $('format-bmm');
-  const slots = fmt === 'board' ? boardSlots : bmmSlots;
-  const fields = container.querySelectorAll('.field');
-  slots.forEach(s => {
-    const taDiv = $(s.ta);
-    const targetField = fields[s.slot];
-    if (targetField && taDiv) {
-      targetField.appendChild(taDiv.querySelector('textarea'));
-    }
+  const cfg = fmt === 'board' ? boardConfig : bmmConfig;
+  $('formatSubhead').textContent = cfg.subhead;
+
+  // Relabel
+  Object.keys(cfg.labels).forEach(k => {
+    $('lbl-' + k).textContent = cfg.labels[k];
+    $('hint-' + k).textContent = cfg.hints[k];
   });
 
-  // Show/hide The Ask textarea wrapper based on format
-  $('ta-opAsk').style.display = fmt === 'board' ? '' : 'none';
+  // Reorder fields
+  const container = $('opFieldsContainer');
+  cfg.order.forEach(id => container.appendChild($(id)));
+
+  // Show/hide The Ask + supporting divider
+  $('fld-opAsk').style.display = fmt === 'board' ? '' : 'none';
+  $('supportingDivider').style.display = fmt === 'board' ? '' : 'none';
 
   updateAll();
   save();
