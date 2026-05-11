@@ -671,22 +671,22 @@ body {
             <input type="text" id="priceUnit" placeholder="e.g. validated standardization opportunity acted on" value="validated standardization opportunity acted on">
             <div class="hint">M3: "the best pricing unit is the one your customer already thinks in."</div>
           </div>
-          <div class="field">
-            <label>Base fee per customer / month ($)</label>
+          <div class="field" id="fieldBase">
+            <label>Base fee per customer / month ($) <span style="font-size:10px;color:var(--text-muted);">Path A only</span></label>
             <input type="number" id="priceBase" placeholder="e.g. 2500" step="100">
           </div>
-          <div class="field">
-            <label>Price per unit ($)</label>
+          <div class="field" id="fieldTierUplift">
+            <label>Tier price uplift / month ($) <span style="font-size:10px;color:var(--text-muted);">Path B + C</span></label>
+            <input type="number" id="priceTierUplift" placeholder="e.g. 3000" step="100" value="2000">
+            <div class="hint">How much the Enterprise tier price increases when agent is included. This is your base revenue for Paths B and C.</div>
+          </div>
+          <div class="field" id="fieldUnitFee">
+            <label>Price per unit ($) <span style="font-size:10px;color:var(--text-muted);">outcome upside per acted-on recommendation</span></label>
             <input type="number" id="priceUnitFee" placeholder="e.g. 500" step="50">
           </div>
-          <div class="field">
+          <div class="field" id="fieldUnits">
             <label>Estimated units / customer / month</label>
             <input type="number" id="priceUnits" placeholder="e.g. 4" step="1">
-          </div>
-          <div class="field">
-            <label>For Path B only: Tier price uplift / month ($)</label>
-            <input type="number" id="priceTierUplift" placeholder="e.g. 3000" step="100" value="2000">
-            <div class="hint">How much the Enterprise tier price increases when agent is included</div>
           </div>
           <div class="field">
             <label>Target customers signed in Year 1</label>
@@ -1068,6 +1068,11 @@ function selectPath(p) {
   $('pickA').classList.toggle('selected', p === 'A');
   $('pickB').classList.toggle('selected', p === 'B');
   $('pickC').classList.toggle('selected', p === 'C');
+  // Show/hide pricing fields per path
+  $('fieldBase').style.display = p === 'A' ? '' : 'none';
+  $('fieldTierUplift').style.display = (p === 'B' || p === 'C') ? '' : 'none';
+  $('fieldUnitFee').style.display = (p === 'A' || p === 'C') ? '' : 'none';
+  $('fieldUnits').style.display = (p === 'A' || p === 'C') ? '' : 'none';
   // Auto-set sensible pricing-model + outcome-upside defaults per path
   if (p === 'A') {
     $('priceModel').value = 'hybrid';
