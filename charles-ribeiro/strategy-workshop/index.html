@@ -680,13 +680,43 @@ body {
             <input type="number" id="priceTierUplift" placeholder="e.g. 3000" step="100" value="2000">
             <div class="hint">How much the Enterprise tier price increases when agent is included. This is your base revenue for Paths B and C.</div>
           </div>
-          <div class="field" id="fieldUnitFee">
-            <label>Outcome price per unit ($) <span style="font-size:10px;color:var(--text-muted);">per acted-on recommendation</span></label>
-            <input type="number" id="priceUnitFee" placeholder="e.g. 500" step="50">
-          </div>
-          <div class="field" id="fieldUnits">
-            <label>Estimated units / customer / month</label>
-            <input type="number" id="priceUnits" placeholder="e.g. 4" step="1">
+          <div id="fieldOutcome" style="grid-column: 1 / -1;">
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+              <button class="btn" id="togglePerUnit" onclick="setOutcomeMode('per_unit')" style="font-size:12px;padding:6px 14px;">$ per unit</button>
+              <button class="btn" id="togglePctSavings" onclick="setOutcomeMode('pct_savings')" style="font-size:12px;padding:6px 14px;">% of savings</button>
+            </div>
+            <div id="outcomePerUnit" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="field">
+                <label>Outcome price per unit ($)</label>
+                <input type="number" id="priceUnitFee" placeholder="e.g. 500" step="50">
+                <div class="hint">Per acted-on recommendation</div>
+              </div>
+              <div class="field">
+                <label>Estimated units / customer / month</label>
+                <input type="number" id="priceUnits" placeholder="e.g. 4" step="1">
+              </div>
+            </div>
+            <div id="outcomePctSavings" style="display:none;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="field">
+                  <label>Estimated savings detected / customer / month ($)</label>
+                  <input type="number" id="priceSavingsDetected" placeholder="e.g. 20000" step="1000">
+                  <div class="hint">Total cost savings the agent surfaces for a typical customer each month</div>
+                </div>
+                <div class="field">
+                  <label>Your share of savings (%)</label>
+                  <input type="number" id="priceSavingsPct" placeholder="e.g. 10" step="1" min="0" max="100">
+                  <div class="hint">Percentage of detected savings charged as outcome fee</div>
+                </div>
+              </div>
+              <div class="results" style="margin-top:10px;">
+                <div class="result-box" style="background:var(--purple-bg);border-color:rgba(160,123,232,0.2);">
+                  <div class="rb-label">Outcome revenue / customer / month</div>
+                  <div class="rb-value" id="valOutcomePct">$—</div>
+                  <div class="rb-sub" id="valOutcomePctSub">savings × share %</div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="field">
             <label>Target customers signed in Year 1</label>
@@ -1071,8 +1101,7 @@ function selectPath(p) {
   // Show/hide pricing fields per path
   $('fieldBase').style.display = p === 'A' ? '' : 'none';
   $('fieldTierUplift').style.display = (p === 'B' || p === 'C') ? '' : 'none';
-  $('fieldUnitFee').style.display = (p === 'A' || p === 'C') ? '' : 'none';
-  $('fieldUnits').style.display = (p === 'A' || p === 'C') ? '' : 'none';
+  $('fieldOutcome').style.display = (p === 'A' || p === 'C') ? '' : 'none';
   // Auto-set sensible pricing-model + outcome-upside defaults per path
   if (p === 'A') {
     $('priceModel').value = 'hybrid';
@@ -1117,17 +1146,38 @@ function topCogs() {
 }
 
 // ============ PRICING ============
-const priceFields = ['priceModel', 'priceStrategy', 'priceUnit', 'priceBase', 'priceUnitFee', 'priceUnits', 'priceTierUplift', 'priceY1Customers'];
+const priceFields = ['priceModel', 'priceStrategy', 'priceUnit', 'priceBase', 'priceUnitFee', 'priceUnits', 'priceTierUplift', 'priceY1Customers', 'priceSavingsDetected', 'priceSavingsPct'];
+let outcomeMode = 'per_unit';
+
+function setOutcomeMode(mode) {
+  outcomeMode = mode;
+  $('outcomePerUnit').style.display = mode === 'per_unit' ? 'grid' : 'none';
+  $('outcomePctSavings').style.display = mode === 'pct_savings' ? '' : 'none';
+  $('togglePerUnit').classList.toggle('primary', mode === 'per_unit');
+  $('togglePctSavings').classList.toggle('primary', mode === 'pct_savings');
+  updateAll();
+  save();
+}
+
+function outcomeRevenue() {
+  if (outcomeMode === 'pct_savings') {
+    const savings = parseFloat($('priceSavingsDetected').value) || 0;
+    const pct = parseFloat($('priceSavingsPct').value) || 0;
+    return savings * (pct / 100);
+  }
+  const ppu = parseFloat($('priceUnitFee').value) || 0;
+  const units = parseFloat($('priceUnits').value) || 0;
+  return ppu * units;
+}
 
 function impliedRevenue() {
   const model = $('priceModel').value;
   const tier = parseFloat($('priceTierUplift').value) || 0;
   const base = parseFloat($('priceBase').value) || 0;
-  const ppu = parseFloat($('priceUnitFee').value) || 0;
-  const units = parseFloat($('priceUnits').value) || 0;
+  const outcome = outcomeRevenue();
   if (model === 'included') return tier;
-  if (model === 'tier_outcome') return tier + ppu * units;  // Path C: tier base + outcome upside
-  return base + ppu * units;
+  if (model === 'tier_outcome') return tier + outcome;
+  return base + outcome;
 }
 
 // ============ FLYWHEEL ============
@@ -1250,14 +1300,24 @@ function updateAll() {
   $('valCogsAnnual').textContent = cogs > 0 ? '$' + (cogs * 12).toFixed(0) : '$—';
   $('valCogsDom').textContent = topCogs();
 
+  // Savings outcome preview
+  if (outcomeMode === 'pct_savings') {
+    const sav = parseFloat($('priceSavingsDetected').value) || 0;
+    const pct = parseFloat($('priceSavingsPct').value) || 0;
+    const oRev = sav * (pct / 100);
+    $('valOutcomePct').textContent = oRev > 0 ? '$' + oRev.toFixed(0) : '$—';
+    $('valOutcomePctSub').textContent = '$' + sav.toLocaleString() + ' × ' + pct + '%';
+  }
+
   // Pricing
   const rev = impliedRevenue();
   $('valRevenue').textContent = rev > 0 ? '$' + rev.toFixed(0) : '$—';
   const model = $('priceModel').value;
+  const outcomeLabel = outcomeMode === 'pct_savings' ? '% of savings' : 'outcome';
   $('valRevenueSub').textContent =
     model === 'included' ? 'tier uplift' :
-    model === 'tier_outcome' ? 'tier base + outcome upside' :
-    'base + outcome';
+    model === 'tier_outcome' ? 'tier base + ' + outcomeLabel :
+    'base + ' + outcomeLabel;
   $('valAnnualRev').textContent = rev > 0 ? '$' + (rev * 12).toFixed(0) : '$—';
 
   if (rev > 0) {
@@ -1477,7 +1537,7 @@ function updateOnepager() {
   const margin = calcMargin();
   const customers = rev > 0 ? Math.ceil(800000 / (rev * 12)) : null;
   let nums = '';
-  if (rev > 0) nums += `Revenue/customer/mo: $${rev.toFixed(0)} · `;
+  if (rev > 0) nums += `Revenue/customer/mo: $${rev.toFixed(0)} (${outcomeMode === 'pct_savings' ? '% of savings' : '$ per unit'}) · `;
   if (cogs > 0) nums += `COGS/customer/mo: $${cogs.toFixed(0)} · `;
   if (margin != null) nums += `GM: ${margin.toFixed(1)}% · `;
   if (customers != null) nums += `Recoup at ${customers} customers (12-mo gross)`;
@@ -1498,7 +1558,7 @@ function updateOnepager() {
 
 // ============ STORAGE ============
 function getState() {
-  const s = { path };
+  const s = { path, outcomeMode };
   [...cogsFields, ...priceFields, ...loopFields, 'slCost', 'slVol', 'slCasc', 'slHaiku',
    'opBet', 'opMoat', 'opMargin', 'opTrust', 'opRoadmap', 'opRisks', 'opAsk'].forEach(id => {
     s[id] = $(id).value;
@@ -1521,8 +1581,9 @@ function load() {
       return;
     }
     if (d.path) selectPath(d.path);
+    if (d.outcomeMode) setOutcomeMode(d.outcomeMode);
     Object.keys(d).forEach(k => {
-      if (k !== 'path' && $(k) && d[k] !== undefined && d[k] !== '') $(k).value = d[k];
+      if (k !== 'path' && k !== 'outcomeMode' && $(k) && d[k] !== undefined && d[k] !== '') $(k).value = d[k];
     });
     loopFields.forEach(id => { if ($(id + 'Val')) $(id + 'Val').textContent = $(id).value; });
   } catch(e) {}
@@ -1560,8 +1621,11 @@ Path: ${path === 'A' ? 'A — Standalone' : path === 'B' ? 'B — Pure Halo / Ti
 - Model: ${s.priceModel || '—'}
 - Strategy: ${s.priceStrategy || '—'}
 - Unit: ${s.priceUnit || '—'}
-- Base/mo: $${s.priceBase || '0'} · Per-unit: $${s.priceUnitFee || '0'} · Units/mo: ${s.priceUnits || '0'}
-- Tier uplift (Path B): $${s.priceTierUplift || '0'}
+- Outcome mode: ${outcomeMode === 'pct_savings' ? '% of savings' : '$ per unit'}
+${outcomeMode === 'pct_savings'
+  ? `- Savings detected/customer/mo: $${s.priceSavingsDetected || '0'} · Share: ${s.priceSavingsPct || '0'}%\n- Outcome revenue/customer/mo: $${outcomeRevenue().toFixed(0)}`
+  : `- Base/mo: $${s.priceBase || '0'} · Per-unit: $${s.priceUnitFee || '0'} · Units/mo: ${s.priceUnits || '0'}`}
+- Tier uplift (Path B/C): $${s.priceTierUplift || '0'}
 - Implied revenue/customer/mo: $${rev.toFixed(0)}
 
 ## Margin
@@ -1641,6 +1705,7 @@ function printFlashcards() {
 
 // Initialize
 load();
+setOutcomeMode(outcomeMode);
 </script>
 </body>
 </html>
