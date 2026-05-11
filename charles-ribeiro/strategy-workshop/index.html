@@ -497,7 +497,7 @@ body {
       <span class="section-title">Positioning Fork</span>
     </div>
     <div class="section-sub">
-      The strategic question that has to land before pricing makes sense. Three live options after reading Russ Mann's Module 1: <strong>Standalone</strong>, <strong>pure Halo</strong>, or <strong>Hybrid (tier base + outcome upside)</strong>. Click to choose. Coach's bet: <strong>Path C</strong> — it threads Russ's PE test (<em>"can it be priced on outcomes?"</em>) without losing the halo logic.
+      The strategic question that has to land before pricing makes sense. Three live options: <strong>Standalone</strong>, <strong>pure Halo</strong>, or <strong>Hybrid (tier base + outcome upside)</strong>. Click to choose. Coach's bet: <strong>Path C</strong> — it threads the PE test (<em>"can it be priced on outcomes?"</em>) without losing the halo logic.
     </div>
 
     <div class="card">
@@ -512,7 +512,7 @@ body {
             <div class="pc-row"><strong>Strategy:</strong> Maximize — premium price justified by savings outcome</div>
             <div class="pc-row"><strong>Recoupment:</strong> Direct agent revenue: N customers × $X/mo × Y months</div>
             <div class="pc-row"><strong>Sales motion:</strong> Standalone deal cycle. Own buyer, demo, ROI conversation</div>
-            <div class="pc-row"><strong>Russ test:</strong> ✓ Passes — outcome-priced</div>
+            <div class="pc-row"><strong>PE test:</strong> ✓ Passes — outcome-priced</div>
             <div class="pc-row"><strong>Risk:</strong> Light usage + lag-to-savings makes price hard to defend on direct value</div>
             <div class="pc-row"><strong>When it fits:</strong> Daily/weekly use cases, measurable savings within a quarter, defined buyer</div>
           </div>
@@ -525,7 +525,7 @@ body {
             <div class="pc-row"><strong>Strategy:</strong> Tier-up — Enterprise becomes more attractive; existing customers upgrade</div>
             <div class="pc-row"><strong>Recoupment:</strong> Incremental platform deals + ACV expansion per deal</div>
             <div class="pc-row"><strong>Sales motion:</strong> Agent is the demo lead. The demo sells the platform</div>
-            <div class="pc-row"><strong>Russ test:</strong> ⚠ Fails as framed — needs outcome reframe (e.g., "outcome = tier upgrades won")</div>
+            <div class="pc-row"><strong>PE test:</strong> ⚠ Fails as framed — needs outcome reframe (e.g., "outcome = tier upgrades won")</div>
             <div class="pc-row"><strong>When it fits:</strong> Episodic use, leadership-layer value, broader platform is the engine</div>
           </div>
 
@@ -537,14 +537,14 @@ body {
             <div class="pc-row"><strong>Strategy:</strong> Maximize — leadership buyer pays the tier; ops user pays the outcome</div>
             <div class="pc-row"><strong>Recoupment:</strong> Tier upgrades + outcome upside on heaviest-savings customers (closes payback gap)</div>
             <div class="pc-row"><strong>Sales motion:</strong> Demo sells the platform. Outcome upside is the value-share story for the operations buyer</div>
-            <div class="pc-row"><strong>Russ test:</strong> ✓ Passes cleanly — outcome component is real, not framed</div>
+            <div class="pc-row"><strong>PE test:</strong> ✓ Passes cleanly — outcome component is real, not framed</div>
             <div class="pc-row"><strong>When it fits:</strong> Two distinct buyers (leadership + ops), savings story is real but adoption pace is uncertain</div>
           </div>
 
         </div>
 
         <div class="tip">
-          <strong>Why Path C threads the needle:</strong> Russ Mann's PE test (Module 1, Slide 8) is explicit — <em>"Can this product be priced on outcomes? YES → build an agent. NO → bolt it in as a feature."</em> Path B as we framed it Saturday fails this test. Path C keeps the demo-sells-the-platform halo logic but adds the outcome component the framework demands. The boss can tell Russ: <em>"Tier-included for the leadership-team buyer. Outcome upside on validated savings for the ops team that drives the value. Both economics work; both buyers are aligned."</em>
+          <strong>Why Path C threads the needle:</strong> The PE test is explicit — <em>"Can this product be priced on outcomes? YES → build an agent. NO → bolt it in as a feature."</em> Path B as we framed it Saturday fails this test. Path C keeps the demo-sells-the-platform halo logic but adds the outcome component the framework demands. The boss can tell the board: <em>"Tier-included for the leadership-team buyer. Outcome upside on validated savings for the ops team that drives the value. Both economics work; both buyers are aligned."</em>
         </div>
       </div>
     </div>
@@ -738,7 +738,7 @@ body {
           <div class="field">
             <label>Target customers signed in Year 1</label>
             <input type="number" id="priceY1Customers" placeholder="e.g. 30" step="1" value="30">
-            <div class="hint">Drives the payback calculation. Be honest — Russ Mann will pressure-test this number.</div>
+            <div class="hint">Drives the payback calculation. Be honest — the board will pressure-test this number.</div>
           </div>
         </div>
 
@@ -778,7 +778,7 @@ body {
         <div class="card-icon" style="background: var(--yellow); color: #000;">M</div>
         <div>
           <div class="card-title">Margin position + payback + stress tests</div>
-          <div class="card-sub">Auto-calculated from sections 2 &amp; 3 · Russ Mann's PE bar: &lt;18mo base, &lt;12mo "funded in the room"</div>
+          <div class="card-sub">Auto-calculated from sections 2 &amp; 3 · PE bar: &lt;18mo base, &lt;12mo "funded in the room"</div>
         </div>
       </div>
       <div class="card-body">
@@ -952,24 +952,83 @@ body {
         </div>
       </div>
       <div class="card-body">
-        <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">Russ Mann's 5-slide structure — boards read slides 1 and 5</div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label>Slide 1 — Problem + Opportunity</label>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="btn" id="toggleBoardDeck" onclick="set1pagerFormat('board')" style="font-size:12px;padding:6px 14px;">5-Slide Board Deck</button>
+          <button class="btn" id="toggleBMM" onclick="set1pagerFormat('bmm')" style="font-size:12px;padding:6px 14px;">Bet / Moat / Margin</button>
+        </div>
+
+        <!-- Board Deck format -->
+        <div id="format-board">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">5-slide structure — boards read slides 1 and 5</div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Slide 1 — Problem + Opportunity</label>
+            <div class="hint">Customer pain in one sentence, quantified. Why now, why us.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Slide 2 — Solution + Market</label>
+            <div class="hint">What we built, defensibility, TAM/SAM/SOM. Bottoms-up first, top-down sanity check.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Slide 3 — Build vs. Buy + Timeline</label>
+            <div class="hint">Why build vs. buy, then the 3-horizon roadmap. Build-decision rationale up front.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Slide 4 — Economics</label>
+            <div class="hint">Payback months as the headline number. Pricing model, COGS, margin, bear case.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Slide 5 — The Ask</label>
+            <div class="hint">What specifically does the boss need from the board? Dollar amount, headcount, decision date, what "yes" looks like vs. "not now." Don't leave the room without a decision.</div>
+          </div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 12px;">Supporting sections (appendix / backup slides)</div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Trust + Guardrails</label>
+          </div>
+          <div class="field">
+            <label>Top 3 Risks + Responses</label>
+          </div>
+        </div>
+
+        <!-- Bet / Moat / Margin format -->
+        <div id="format-bmm" style="display:none;">
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">The Bet · The Moat · The Margin — six-section AI product strategy</div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>The Bet</label>
+            <div class="hint">What are we betting on? Customer pain, why now, why us. The single sentence that justifies everything below.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>The Moat</label>
+            <div class="hint">What makes this defensible? Workflow position, data flywheel, TAM/SAM/SOM. What compounds over time.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>The Margin</label>
+            <div class="hint">Full economics: pricing model, COGS, margin, bear case, recoupment. The math that proves the bet.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Trust + Guardrails</label>
+            <div class="hint">What constraints are in place? Clinical safety posture, data isolation, human-in-the-loop.</div>
+          </div>
+          <div class="field" style="margin-bottom: 12px;">
+            <label>Roadmap</label>
+            <div class="hint">Build vs. buy rationale, then the 3-horizon plan. What ships when, and what gates the next phase.</div>
+          </div>
+          <div class="field">
+            <label>Top 3 Risks + Responses</label>
+            <div class="hint">The three things that could kill this, and the honest mitigation for each.</div>
+          </div>
+        </div>
+
+        <!-- Shared textareas (move into active format via JS) -->
+        <div id="ta-opBet" class="field" style="margin-bottom: 12px;">
           <textarea id="opBet">An AI agent that surfaces cost-variance opportunities in clinical surgical supplies for hospital supply chain leaders. Sold as the differentiator inside our Enterprise platform tier — the agent is the reason the platform gets bought, not a separate line item. Why now: post-merger, we are the only player covering the holistic 3-company life cycle (contracting + inventory + implants), and that window closes in 18+ months as Epic/Cerner build supplier APIs of their own. First customers asked "how much?" the day they saw the demo. We move now.</textarea>
-          <div class="hint">Customer pain in one sentence, quantified. Why now, why us.</div>
         </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label>Slide 2 — Solution + Market</label>
+        <div id="ta-opMoat" class="field" style="margin-bottom: 12px;">
           <textarea id="opMoat">(1) Workflow embedding across the holistic 3-company life cycle that no single competitor can replicate. Competitors have one slice — we have the integrated path from contract to scan to implant. (2) Data flywheel: when a recommendation is overridden, we capture WHY. Correction and Domain Context loops compound across customers — competitors see only outputs, we see reasoning. The model is replaceable; the workflow position and the override-reason data are not. TAM: ~$120M (5,000 hospitals × $24k ACV). SAM: ~$24M (1,000 hospitals in coverage). SOM Year 1: ~$360k.</textarea>
-          <div class="hint">What we built, defensibility, TAM/SAM/SOM. Bottoms-up first, top-down sanity check.</div>
         </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label>Slide 3 — Build vs. Buy + Timeline</label>
+        <div id="ta-opRoadmap" class="field" style="margin-bottom: 12px;">
           <textarea id="opRoadmap">Build decision: $800k vendor investment in PE-affiliated dev shop — build, not buy, because no off-the-shelf agent covers the 3-company life cycle integration. Q3 2026 (July conference launch): Agent #1 live with N design partners; full-platform pricing motion in market. Q4 2026: wider rollout, flywheel measurement against scored design, ship cheap-tier (Haiku) routing for the bounded operations as the funded cost-down lever. Q1 2027: ship model-abstraction layer + 50-case eval suite to make any future provider swap eval-gated and lossless. 2027: Agents #2-#4 sequenced based on Agent #1's adoption signal — we don't ship the others until #1 is proven.</textarea>
-          <div class="hint">Why build vs. buy, then the 3-horizon roadmap. Build-decision rationale up front.</div>
         </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label>Slide 4 — Economics</label>
+        <div id="ta-opMargin" class="field" style="margin-bottom: 12px;">
           <textarea id="opMargin">Pricing: % of savings delivered — estimated from service-line PO data during pre-sales, billed monthly over the 12–24 month engagement. This is not a one-time saving; it's a fundamental reduction in the hospital's recurring cost base. The agent finds the savings, the RFP/negotiation process delivers them, and we bill on what's actually realized.
 
 Enterprise tier uplift covers COGS plus base margin (leadership-team buyer); outcome upside on validated standardization savings (operations team that drives the value). Both economics work; both buyers are aligned.
@@ -977,21 +1036,14 @@ Enterprise tier uplift covers COGS plus base margin (leadership-team buyer); out
 Architecture today: Claude Sonnet via AWS Bedrock for all features — sensible v1, defensible margins. Q4 cost-down lever: route bounded operations (cost-variance, dashboards, recommendations) to Claude Haiku, keeping Sonnet for chat + governance packs. Modeled saving: ~45% COGS reduction at 60% Haiku routing.
 
 Recoupment: $800k vendor spend recouped via combined tier uplift + outcome upside; bear case (cost +50%, usage +30%, ramp -50%) modeled and survivable. Volume risk (lower surgical volumes, surgeon mobility) modeled as haircut on delivered savings.</textarea>
-          <div class="hint">Payback months as the headline number. Pricing model, COGS, margin, bear case.</div>
         </div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label>Slide 5 — The Ask</label>
-          <textarea id="opAsk" placeholder="What specifically does the boss need from the board? E.g.: Sign-off on $X pricing. Permission to commit to July conference launch. Budget of $Y for Q4 abstraction-layer engineering. What does 'yes' look like vs. 'not now'? Fill this in live during the session."></textarea>
-          <div class="hint">What specifically does the boss need from the board? Dollar amount, headcount, decision date, what "yes" looks like vs. "not now." Don't leave the room without a decision.</div>
+        <div id="ta-opAsk" class="field" style="margin-bottom: 12px;">
+          <textarea id="opAsk" placeholder="What specifically does the boss need from the board? E.g.: Sign-off on $X pricing. Permission to commit to July conference launch. Budget of $Y for Q4 abstraction-layer engineering. What does 'yes' looks like vs. 'not now'? Fill this in live during the session."></textarea>
         </div>
-
-        <div style="font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin: 20px 0 12px;">Supporting sections (appendix / backup slides)</div>
-        <div class="field" style="margin-bottom: 12px;">
-          <label>Trust + Guardrails</label>
+        <div id="ta-opTrust" class="field" style="margin-bottom: 12px;">
           <textarea id="opTrust">No clinical-safety surface in scope for v1 (cost-optimization only) — reduces regulatory exposure and architecture complexity. Structural guardrails enforced in code: clinical language disclaimer, statistical thresholds before surgeon-level findings surface, exclusion of in-process cases, cross-customer data isolation at the database level. Prompt-level: no cross-vendor substitution, whole-basket implant rules, surgeon anonymization on exports. Audit trail on every recommendation. Human-in-the-loop for committee-facing outputs.</textarea>
         </div>
-        <div class="field">
-          <label>Top 3 Risks + Responses</label>
+        <div id="ta-opRisks" class="field">
           <textarea id="opRisks">(1) Single-vendor lock-in: hard-coded to Claude on AWS Bedrock today, no abstraction layer. Mitigation is two-step — Bedrock makes within-gateway swaps to Llama or Mistral materially easier (engineering days, not months); Q1 2027 ships the full abstraction layer + 50-case eval suite to make swaps eval-gated.
 (2) Volume & surgeon mobility: lower surgical volumes or surgeons moving facilities directly reduces delivered savings and our revenue (current examples: Erlanger, Inova). Mitigation: volume risk is modeled as a haircut in our pricing; % of savings means we only bill on what's actually delivered — if savings drop, our billing drops proportionally, which is honest but means we need more customers to hit the payback target.
 (3) Platform encroachment by Epic / Cerner: workflow depth + data flywheel compound while their 18+ month integration cycles run. We don't outrun them forever — we use the window to make ourselves indispensable.</textarea>
@@ -1012,15 +1064,32 @@ Recoupment: $800k vendor spend recouped via combined tier uplift + outcome upsid
         <div class="onepager" id="onepagerBody">
           <h2>AI Agent #1 — Cost-Variance Recommendations for Clinical Surgical Supplies</h2>
           <div class="op-sub">Strategy briefing for the Board · Prepared by VP Product · 2026-05-14</div>
-          <div class="op-section"><h3>1. Problem + Opportunity</h3><p id="opPreviewBet"></p></div>
-          <div class="op-section"><h3>2. Solution + Market</h3><p id="opPreviewMoat"></p></div>
-          <div class="op-section"><h3>3. Build vs. Buy + Timeline</h3><p id="opPreviewRoadmap"></p></div>
-          <div class="op-section"><h3>4. Economics</h3><p id="opPreviewMargin"></p>
-            <p style="font-size: 11px; color: #55556a; margin-top: 6px;"><strong>Numbers:</strong> <span id="opPreviewNumbers">—</span></p>
+
+          <!-- Board Deck preview -->
+          <div id="preview-board">
+            <div class="op-section"><h3>1. Problem + Opportunity</h3><p id="opPreviewBet"></p></div>
+            <div class="op-section"><h3>2. Solution + Market</h3><p id="opPreviewMoat"></p></div>
+            <div class="op-section"><h3>3. Build vs. Buy + Timeline</h3><p id="opPreviewRoadmap"></p></div>
+            <div class="op-section"><h3>4. Economics</h3><p id="opPreviewMargin"></p>
+              <p style="font-size: 11px; color: #55556a; margin-top: 6px;"><strong>Numbers:</strong> <span id="opPreviewNumbers">—</span></p>
+            </div>
+            <div class="op-section"><h3>5. The Ask</h3><p id="opPreviewAsk"></p></div>
+            <div class="op-section" style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px; margin-top: 8px;"><h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;">Supporting: Trust + Guardrails</h3><p id="opPreviewTrust"></p></div>
+            <div class="op-section"><h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;">Supporting: Top 3 Risks &amp; Responses</h3><p id="opPreviewRisks"></p></div>
           </div>
-          <div class="op-section"><h3>5. The Ask</h3><p id="opPreviewAsk"></p></div>
-          <div class="op-section" style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 12px; margin-top: 8px;"><h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;">Supporting: Trust + Guardrails</h3><p id="opPreviewTrust"></p></div>
-          <div class="op-section"><h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;">Supporting: Top 3 Risks &amp; Responses</h3><p id="opPreviewRisks"></p></div>
+
+          <!-- Bet / Moat / Margin preview -->
+          <div id="preview-bmm" style="display:none;">
+            <div class="op-section"><h3>The Bet</h3><p id="opPreviewBet2"></p></div>
+            <div class="op-section"><h3>The Moat</h3><p id="opPreviewMoat2"></p></div>
+            <div class="op-section"><h3>The Margin</h3><p id="opPreviewMargin2"></p>
+              <p style="font-size: 11px; color: #55556a; margin-top: 6px;"><strong>Numbers:</strong> <span id="opPreviewNumbers2">—</span></p>
+            </div>
+            <div class="op-section"><h3>Trust + Guardrails</h3><p id="opPreviewTrust2"></p></div>
+            <div class="op-section"><h3>Roadmap</h3><p id="opPreviewRoadmap2"></p></div>
+            <div class="op-section"><h3>Top 3 Risks &amp; Responses</h3><p id="opPreviewRisks2"></p></div>
+          </div>
+
           <div class="op-meta">
             <span>Path: <strong id="opPreviewPath">[choose Path A/B/C in Section 1]</strong></span>
             <span>Flywheel: <strong id="opPreviewFlywheel">—/20 today</strong></span>
@@ -1403,7 +1472,7 @@ function updateAll() {
     $('rbStress2x').className = 'result-box ' + (m2x >= 30 ? 'warning' : 'danger');
 
     // ---- Bear case: cost +50% AND volume +30% AND adoption -50% combined ----
-    // Russ Mann: "Most AI projects fail not because one thing goes wrong but because 2-3 things go mildly wrong at the same time."
+    // Most AI projects fail because 2-3 things go mildly wrong at the same time.
     const bearCogs = cogs * 1.5 * 1.3; // 50% provider hike × 30% heavier usage
     const bearMargin = ((rev - bearCogs) / rev) * 100;
     const bearGmPerCust = rev - bearCogs;
@@ -1420,7 +1489,7 @@ function updateAll() {
       $('rbBearPayback').className = 'result-box';
     }
 
-    // ---- Verdict — now combines stress + payback against Russ's PE bar ----
+    // ---- Verdict — combines stress + payback against PE bar ----
     const v = $('marginVerdict');
     v.style.display = '';
     const worst = Math.min(m3x, m2x, bearMargin);
@@ -1437,7 +1506,7 @@ function updateAll() {
     } else {
       v.className = 'verdict danger';
       verdictText = baseMonths != null
-        ? `Base payback ${baseMonths.toFixed(1)}mo — well over Russ's 18-mo PE bar. Re-pricing or re-scoping needed before May 14.`
+        ? `Base payback ${baseMonths.toFixed(1)}mo — well over the 18-mo PE bar. Re-pricing or re-scoping needed before May 14.`
         : 'Margins underwater. Address pricing or COGS before showing this to anyone.';
     }
     v.textContent = verdictText;
@@ -1510,7 +1579,7 @@ function updateQA() {
   }
   $('qaA2').innerHTML = q2;
 
-  // --- Q3: payback math (Russ Mann's headline metric) ---
+  // --- Q3: payback math (PE headline metric) ---
   const y1c = parseFloat($('priceY1Customers').value) || 0;
   const cogsTotal = totalCogs();
   const gmPerCust = rev - cogsTotal;
@@ -1560,14 +1629,71 @@ function escapeHtml(s) {
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+// ============ 1-PAGER FORMAT TOGGLE ============
+let onepagerFormat = 'board';
+
+const boardSlots = [
+  { ta: 'ta-opBet', slot: 0 },
+  { ta: 'ta-opMoat', slot: 1 },
+  { ta: 'ta-opRoadmap', slot: 2 },
+  { ta: 'ta-opMargin', slot: 3 },
+  { ta: 'ta-opAsk', slot: 4 },
+  { ta: 'ta-opTrust', slot: 5 },
+  { ta: 'ta-opRisks', slot: 6 }
+];
+const bmmSlots = [
+  { ta: 'ta-opBet', slot: 0 },
+  { ta: 'ta-opMoat', slot: 1 },
+  { ta: 'ta-opMargin', slot: 2 },
+  { ta: 'ta-opTrust', slot: 3 },
+  { ta: 'ta-opRoadmap', slot: 4 },
+  { ta: 'ta-opRisks', slot: 5 }
+];
+
+function set1pagerFormat(fmt) {
+  onepagerFormat = fmt;
+  $('format-board').style.display = fmt === 'board' ? '' : 'none';
+  $('format-bmm').style.display = fmt === 'bmm' ? '' : 'none';
+  $('preview-board').style.display = fmt === 'board' ? '' : 'none';
+  $('preview-bmm').style.display = fmt === 'bmm' ? '' : 'none';
+  $('toggleBoardDeck').classList.toggle('primary', fmt === 'board');
+  $('toggleBMM').classList.toggle('primary', fmt === 'bmm');
+
+  const container = fmt === 'board' ? $('format-board') : $('format-bmm');
+  const slots = fmt === 'board' ? boardSlots : bmmSlots;
+  const fields = container.querySelectorAll('.field');
+  slots.forEach(s => {
+    const taDiv = $(s.ta);
+    const targetField = fields[s.slot];
+    if (targetField && taDiv) {
+      targetField.appendChild(taDiv.querySelector('textarea'));
+    }
+  });
+
+  // Show/hide The Ask textarea wrapper based on format
+  $('ta-opAsk').style.display = fmt === 'board' ? '' : 'none';
+
+  updateAll();
+  save();
+}
+
 function updateOnepager() {
+  // Board deck preview
   $('opPreviewBet').textContent = $('opBet').value;
   $('opPreviewMoat').textContent = $('opMoat').value;
   $('opPreviewMargin').textContent = $('opMargin').value;
   $('opPreviewTrust').textContent = $('opTrust').value;
   $('opPreviewRoadmap').textContent = $('opRoadmap').value;
   $('opPreviewRisks').textContent = $('opRisks').value;
-  $('opPreviewAsk').textContent = $('opAsk').value || '[Fill in Slide 5 — The Ask]';
+  $('opPreviewAsk').textContent = $('opAsk').value || '[Fill in The Ask]';
+
+  // BMM preview
+  $('opPreviewBet2').textContent = $('opBet').value;
+  $('opPreviewMoat2').textContent = $('opMoat').value;
+  $('opPreviewMargin2').textContent = $('opMargin').value;
+  $('opPreviewTrust2').textContent = $('opTrust').value;
+  $('opPreviewRoadmap2').textContent = $('opRoadmap').value;
+  $('opPreviewRisks2').textContent = $('opRisks').value;
 
   const rev = impliedRevenue();
   const cogs = totalCogs();
@@ -1579,6 +1705,7 @@ function updateOnepager() {
   if (margin != null) nums += `GM: ${margin.toFixed(1)}% · `;
   if (customers != null) nums += `Recoup at ${customers} customers (12-mo gross)`;
   $('opPreviewNumbers').textContent = nums || '—';
+  $('opPreviewNumbers2').textContent = nums || '—';
 
   $('opPreviewPath').textContent =
     path === 'A' ? 'A — Standalone' :
@@ -1595,7 +1722,7 @@ function updateOnepager() {
 
 // ============ STORAGE ============
 function getState() {
-  const s = { path, outcomeMode };
+  const s = { path, outcomeMode, onepagerFormat };
   [...cogsFields, ...priceFields, ...loopFields, 'slCost', 'slVol', 'slCasc', 'slHaiku',
    'opBet', 'opMoat', 'opMargin', 'opTrust', 'opRoadmap', 'opRisks', 'opAsk'].forEach(id => {
     s[id] = $(id).value;
@@ -1612,15 +1739,16 @@ function load() {
   try {
     const d = JSON.parse(localStorage.getItem(KEY));
     if (!d) {
-      // First open — pre-select Path C as the leaning bet (Russ-test-passing hybrid)
+      // First open — pre-select Path C as the leaning bet (PE-test-passing hybrid)
       selectPath('C');
       updateAll();
       return;
     }
     if (d.path) selectPath(d.path);
     if (d.outcomeMode) setOutcomeMode(d.outcomeMode);
+    if (d.onepagerFormat) set1pagerFormat(d.onepagerFormat);
     Object.keys(d).forEach(k => {
-      if (k !== 'path' && k !== 'outcomeMode' && $(k) && d[k] !== undefined && d[k] !== '') $(k).value = d[k];
+      if (k !== 'path' && k !== 'outcomeMode' && k !== 'onepagerFormat' && $(k) && d[k] !== undefined && d[k] !== '') $(k).value = d[k];
     });
     loopFields.forEach(id => { if ($(id + 'Val')) $(id + 'Val').textContent = $(id).value; });
   } catch(e) {}
@@ -1676,7 +1804,7 @@ ${outcomeMode === 'pct_savings'
 - Network: ${s.loopNet}/5
 - TOTAL: ${flywheelTotal()}/20
 
-## Board Deck (Russ Mann 5-slide structure)
+## Board Deck (5-slide structure)
 ### Slide 1 — Problem + Opportunity
 ${s.opBet}
 
@@ -1743,6 +1871,7 @@ function printFlashcards() {
 // Initialize
 load();
 setOutcomeMode(outcomeMode);
+set1pagerFormat(onepagerFormat);
 </script>
 </body>
 </html>
