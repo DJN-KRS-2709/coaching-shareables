@@ -161,6 +161,44 @@ body {
 .pick-card .pc-row strong { color: var(--text); }
 .pick-card.selected .pc-row { border-top-color: rgba(37,99,235,0.15); }
 
+/* Tooltips */
+.tooltip {
+  position: relative; display: inline-flex; align-items: center; cursor: help;
+}
+.tooltip .tip-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--border); color: var(--text-dim);
+  font-size: 10px; font-weight: 700; margin-left: 6px; flex-shrink: 0;
+}
+.tooltip .tip-text {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 0;
+  width: 300px; padding: 12px 14px;
+  background: var(--nav-bg); color: #fff; font-size: 12px; line-height: 1.5;
+  border-radius: 8px; z-index: 30; font-weight: 400; text-transform: none; letter-spacing: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.tooltip .tip-text::after {
+  content: ''; position: absolute; top: 100%; left: 20px;
+  border: 6px solid transparent; border-top-color: var(--nav-bg);
+}
+.tooltip:hover .tip-text { display: block; }
+
+/* Score legend */
+.score-legend {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  margin-bottom: 16px; padding: 12px 14px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius);
+}
+.score-legend .sl-item { text-align: center; }
+.score-legend .sl-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 16px;
+  font-weight: 700; color: var(--blue);
+}
+.score-legend .sl-label {
+  font-size: 9px; color: var(--text-muted); margin-top: 2px; line-height: 1.3;
+}
+
 /* Form fields */
 .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .input-grid.three { grid-template-columns: 1fr 1fr 1fr; }
@@ -577,33 +615,34 @@ body {
       <div class="card-body">
         <div class="input-grid">
           <div class="field">
-            <label>Inference — recommendation engine ($)</label>
+            <label><span class="tooltip">Inference — recommendation engine ($)<span class="tip-icon">?</span><span class="tip-text">The cost of running the AI model that analyzes surgical supply data and generates cost-variance recommendations. Each time the agent scans procedures, compares pricing, and surfaces savings opportunities, it makes API calls to the LLM. Cost scales with how often recommendations refresh and how many procedures are analyzed per customer.</span></span></label>
             <input type="number" id="cogsRec" placeholder="e.g. 80" step="1" value="80">
             <div class="hint">Largest line. Driven by refresh frequency × procedure volume.</div>
           </div>
           <div class="field">
-            <label>Inference — chat agent ($)</label>
+            <label><span class="tooltip">Inference — chat agent ($)<span class="tip-icon">?</span><span class="tip-text">The cost of the conversational AI that lets users ask questions about recommendations — e.g., "Why is Surgeon Smith's implant cost 40% above median?" Each chat message is a separate API call to the LLM. Cost is variable: some users ask 2 questions/month, power users ask 50+. Consider metering or capping to control spend.</span></span></label>
             <input type="number" id="cogsChat" placeholder="e.g. 25" step="1" value="30">
-            <div class="hint">Variable per chat. Power users can spike — meter or cap.</div>
+            <div class="hint">Variable per chat session. Power users can spike — consider metering or capping.</div>
           </div>
           <div class="field">
-            <label>Embeddings / RAG ($)</label>
+            <label><span class="tooltip">Embeddings / RAG ($)<span class="tip-icon">?</span><span class="tip-text">Retrieval-Augmented Generation: the agent converts supplier contracts, PO data, and clinical documents into searchable vector embeddings so it can reference them when generating recommendations. Cost comes from (1) initial embedding of documents and (2) retrieval queries every time the agent needs context. Gets called more often than expected — every recommendation and every chat message triggers retrieval.</span></span></label>
             <input type="number" id="cogsEmb" placeholder="e.g. 20" step="1" value="15">
-            <div class="hint">M3 trap: embeddings get called more than you think. Always more.</div>
+            <div class="hint">Embeddings get called more than you think — every recommendation and chat query triggers retrieval.</div>
           </div>
           <div class="field">
-            <label>Infrastructure / hosting ($)</label>
+            <label><span class="tooltip">Infrastructure / hosting ($)<span class="tip-icon">?</span><span class="tip-text">Cloud compute, servers, and networking costs to run the application — API gateways, load balancers, application servers. Relatively fixed per customer, but scales with usage volume. Includes AWS Bedrock access fees beyond the per-token inference costs.</span></span></label>
             <input type="number" id="cogsInfra" placeholder="e.g. 15" step="1" value="15">
+            <div class="hint">Cloud compute, API gateways, load balancers. Relatively fixed per customer.</div>
           </div>
           <div class="field">
-            <label>Data / storage ($)</label>
+            <label><span class="tooltip">Data / storage ($)<span class="tip-icon">?</span><span class="tip-text">Cost of storing and processing the customer's data — mirrored data from the 3-company platform (contracting, inventory, implants), plus the customer's own transactional PO data. Includes database hosting, backup, and data transfer costs between systems.</span></span></label>
             <input type="number" id="cogsData" placeholder="e.g. 10" step="1" value="8">
-            <div class="hint">Mirrored 3-company data + customer transactional data</div>
+            <div class="hint">Mirrored 3-company data + customer transactional PO data.</div>
           </div>
           <div class="field">
-            <label>Human review ($)</label>
+            <label><span class="tooltip">Human review ($)<span class="tip-icon">?</span><span class="tip-text">Cost of a human analyst reviewing AI outputs before they reach the customer — e.g., checking that committee-facing reports are accurate. Drops to $0 if the agent only handles cost-optimization (no clinical safety surface), since cost recommendations don't require clinical sign-off.</span></span></label>
             <input type="number" id="cogsHuman" placeholder="e.g. 0 if no clinical surface" step="1" value="0">
-            <div class="hint">Drops to 0 if no clinical safety surface (per the digging Charles did)</div>
+            <div class="hint">Drops to $0 if no clinical safety surface — cost-optimization only doesn't need clinical sign-off.</div>
           </div>
         </div>
 
@@ -892,10 +931,17 @@ body {
         </div>
       </div>
       <div class="card-body">
+        <div class="score-legend">
+          <div class="sl-item"><div class="sl-num">1</div><div class="sl-label">Not built yet</div></div>
+          <div class="sl-item"><div class="sl-num">2</div><div class="sl-label">Manual / ad-hoc</div></div>
+          <div class="sl-item"><div class="sl-num">3</div><div class="sl-label">Structured, not automated</div></div>
+          <div class="sl-item"><div class="sl-num">4</div><div class="sl-label">Automated, compounding</div></div>
+          <div class="sl-item"><div class="sl-num">5</div><div class="sl-label">Self-reinforcing moat</div></div>
+        </div>
         <div id="flywheelGrid">
           <div class="loop-row">
             <div class="loop-name">
-              Correction Loop
+              <span class="tooltip">Correction Loop<span class="tip-icon">?</span><span class="tip-text">When a surgeon sees a recommendation but doesn't act on it, do we capture the reason why? E.g., "I prefer this vendor for clinical reason X" or "this data is outdated." That override signal is proprietary — competitors only see that the recommendation was ignored, not why. A score of 1 means we don't capture overrides at all. A score of 5 means every override auto-feeds back into the model and measurably improves future recommendations.</span></span>
               <div class="ln-desc">When a surgeon overrides a recommendation, do we capture <em>why</em>? Is that signal reused?</div>
             </div>
             <div class="loop-score" id="loopCorrVal">2</div>
@@ -903,7 +949,7 @@ body {
           </div>
           <div class="loop-row">
             <div class="loop-name">
-              Preference Loop
+              <span class="tooltip">Preference Loop<span class="tip-icon">?</span><span class="tip-text">Does the agent learn individual surgeon preferences over time? E.g., Surgeon Smith always prefers Brand X knee implants for patients over 70 due to durability data. A score of 1 means no personalization — every surgeon gets the same generic recommendations. A score of 5 means the agent builds per-surgeon preference profiles that auto-adjust recommendations and measurably reduce override rates.</span></span>
               <div class="ln-desc">Does the agent learn that Surgeon Smith prefers brand X for clinical reason Y? Per-surgeon personalization?</div>
             </div>
             <div class="loop-score" id="loopPrefVal">1</div>
@@ -911,7 +957,7 @@ body {
           </div>
           <div class="loop-row">
             <div class="loop-name">
-              Domain Context Loop
+              <span class="tooltip">Domain Context Loop<span class="tip-icon">?</span><span class="tip-text">Does data from one part of the business improve another? E.g., contract negotiation insights from Company A improving inventory recommendations in Company B, or implant usage patterns informing procurement strategy. This is the cross-domain advantage of the 3-company life cycle. A score of 1 means each domain operates in a silo. A score of 5 means insights flow automatically across contracting, inventory, and implants, and each domain's data measurably improves the others.</span></span>
               <div class="ln-desc">Does usage in one hospital improve recommendations elsewhere? Cross-domain insight (contracting × inventory × implants)?</div>
             </div>
             <div class="loop-score" id="loopDomVal">2</div>
@@ -919,7 +965,7 @@ body {
           </div>
           <div class="loop-row">
             <div class="loop-name">
-              Network Loop
+              <span class="tooltip">Network Loop<span class="tip-icon">?</span><span class="tip-text">Does each new hospital customer make the system better for all existing customers? E.g., anonymized peer-cost benchmarks — "hospitals like yours pay 20% less for this implant." This is the classic network effect: more customers = better data = better recommendations = more customers. A score of 1 means no cross-customer learning. A score of 5 means federated benchmarks are live, customers see peer comparisons, and each new hospital measurably improves recommendation quality for everyone.</span></span>
               <div class="ln-desc">Does each new hospital make the system better for everyone? Federated peer-cost benchmarks?</div>
             </div>
             <div class="loop-score" id="loopNetVal">1</div>
