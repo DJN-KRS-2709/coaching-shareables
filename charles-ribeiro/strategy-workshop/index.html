@@ -1809,7 +1809,24 @@ ${outcomeMode === 'pct_savings'
 - Network: ${s.loopNet}/5
 - TOTAL: ${flywheelTotal()}/20
 
-## Board Deck (5-slide structure)
+${onepagerFormat === 'bmm' ? `## AI Product Strategy (Bet / Moat / Margin)
+### The Bet
+${s.opBet}
+
+### The Moat
+${s.opMoat}
+
+### The Margin
+${s.opMargin}
+
+### Trust + Guardrails
+${s.opTrust}
+
+### Roadmap
+${s.opRoadmap}
+
+### Top 3 Risks + Responses
+${s.opRisks}` : `## Board Deck (5-slide structure)
 ### Slide 1 — Problem + Opportunity
 ${s.opBet}
 
@@ -1829,7 +1846,7 @@ ${s.opAsk || '[Not yet filled in]'}
 ${s.opTrust}
 
 ### Supporting: Top 3 Risks + Responses
-${s.opRisks}
+${s.opRisks}`}
 `;
   navigator.clipboard.writeText(txt).then(() => showToast('Summary copied to clipboard'));
 }
