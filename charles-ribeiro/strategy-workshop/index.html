@@ -699,21 +699,38 @@ body {
             <div id="outcomePctSavings" style="display:none;">
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                 <div class="field">
-                  <label>Estimated savings detected / customer / month ($)</label>
-                  <input type="number" id="priceSavingsDetected" placeholder="e.g. 20000" step="1000">
-                  <div class="hint">Total cost savings the agent surfaces for a typical customer each month</div>
+                  <label>Estimated annual savings / customer ($)</label>
+                  <input type="number" id="priceSavingsDetected" placeholder="e.g. 240000" step="10000">
+                  <div class="hint">Estimated from service-line PO data during pre-sales. This is the recurring cost-base reduction, not a one-time saving.</div>
                 </div>
                 <div class="field">
                   <label>Your share of savings (%)</label>
                   <input type="number" id="priceSavingsPct" placeholder="e.g. 10" step="1" min="0" max="100">
-                  <div class="hint">Percentage of detected savings charged as outcome fee</div>
+                  <div class="hint">Percentage of delivered savings billed monthly. Accrues over the engagement (typically 12–24 months).</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+                <div class="field">
+                  <label>Billing accrual period (months)</label>
+                  <input type="number" id="priceBillingMonths" placeholder="e.g. 18" step="1" min="1" max="36" value="18">
+                  <div class="hint">How long savings-based billing runs. Current model: 12–24 months after RFP/negotiations conclude.</div>
+                </div>
+                <div class="field">
+                  <label>Volume risk haircut (%)</label>
+                  <input type="number" id="priceVolumeRisk" placeholder="e.g. 15" step="5" min="0" max="100" value="0">
+                  <div class="hint">Discount for volume drops or surgeon mobility (e.g., Erlanger/Inova effect). 0% = full savings delivered.</div>
                 </div>
               </div>
               <div class="results" style="margin-top:10px;">
                 <div class="result-box" style="background:var(--purple-bg);border-color:rgba(160,123,232,0.2);">
                   <div class="rb-label">Outcome revenue / customer / month</div>
                   <div class="rb-value" id="valOutcomePct">$—</div>
-                  <div class="rb-sub" id="valOutcomePctSub">savings × share %</div>
+                  <div class="rb-sub" id="valOutcomePctSub">annual savings × share % ÷ 12</div>
+                </div>
+                <div class="result-box" style="background:var(--surface2);">
+                  <div class="rb-label">Total billing over accrual period</div>
+                  <div class="rb-value" id="valAccrualTotal">$—</div>
+                  <div class="rb-sub" id="valAccrualSub">monthly × accrual months</div>
                 </div>
               </div>
             </div>
@@ -953,7 +970,13 @@ body {
         </div>
         <div class="field" style="margin-bottom: 12px;">
           <label>Slide 4 — Economics</label>
-          <textarea id="opMargin">Pricing: hybrid — Enterprise tier uplift covers COGS plus base margin (the leadership-team buyer pays this); outcome upside on validated standardization savings (the operations team that drives the savings pays this). Both economics work; both buyers are aligned. Passes the PE test for outcome-based pricing without making revenue hostage to daily agent usage. Architecture today: Claude Sonnet via AWS Bedrock for all features — sensible v1, defensible margins. Q4 cost-down lever: route bounded operations (cost-variance, dashboards, recommendations) to Claude Haiku, keeping Sonnet for chat + governance pack generation. Modeled saving: ~45% COGS reduction at 60% Haiku routing. Recoupment: $800k vendor spend recouped via combined tier uplift + outcome upside; bear case (cost +50%, usage +30%, ramp -50%) modeled and survivable.</textarea>
+          <textarea id="opMargin">Pricing: % of savings delivered — estimated from service-line PO data during pre-sales, billed monthly over the 12–24 month engagement. This is not a one-time saving; it's a fundamental reduction in the hospital's recurring cost base. The agent finds the savings, the RFP/negotiation process delivers them, and we bill on what's actually realized.
+
+Enterprise tier uplift covers COGS plus base margin (leadership-team buyer); outcome upside on validated standardization savings (operations team that drives the value). Both economics work; both buyers are aligned.
+
+Architecture today: Claude Sonnet via AWS Bedrock for all features — sensible v1, defensible margins. Q4 cost-down lever: route bounded operations (cost-variance, dashboards, recommendations) to Claude Haiku, keeping Sonnet for chat + governance packs. Modeled saving: ~45% COGS reduction at 60% Haiku routing.
+
+Recoupment: $800k vendor spend recouped via combined tier uplift + outcome upside; bear case (cost +50%, usage +30%, ramp -50%) modeled and survivable. Volume risk (lower surgical volumes, surgeon mobility) modeled as haircut on delivered savings.</textarea>
           <div class="hint">Payback months as the headline number. Pricing model, COGS, margin, bear case.</div>
         </div>
         <div class="field" style="margin-bottom: 12px;">
@@ -969,7 +992,9 @@ body {
         </div>
         <div class="field">
           <label>Top 3 Risks + Responses</label>
-          <textarea id="opRisks">(1) Single-vendor lock-in: hard-coded to Claude on AWS Bedrock today, no abstraction layer. Mitigation is two-step — Bedrock makes within-gateway swaps to Llama or Mistral materially easier (engineering days, not months); Q1 2027 ships the full abstraction layer + 50-case eval suite to make swaps eval-gated. (2) Slow adoption beyond the demo: Path B pricing does not make revenue hostage to DAU; if usage stays light, the agent still drives the deals it influenced. (3) Platform encroachment by Epic / Cerner: workflow depth + data flywheel compound while their 18+ month integration cycles run. We don't outrun them forever — we use the window to make ourselves indispensable.</textarea>
+          <textarea id="opRisks">(1) Single-vendor lock-in: hard-coded to Claude on AWS Bedrock today, no abstraction layer. Mitigation is two-step — Bedrock makes within-gateway swaps to Llama or Mistral materially easier (engineering days, not months); Q1 2027 ships the full abstraction layer + 50-case eval suite to make swaps eval-gated.
+(2) Volume & surgeon mobility: lower surgical volumes or surgeons moving facilities directly reduces delivered savings and our revenue (current examples: Erlanger, Inova). Mitigation: volume risk is modeled as a haircut in our pricing; % of savings means we only bill on what's actually delivered — if savings drop, our billing drops proportionally, which is honest but means we need more customers to hit the payback target.
+(3) Platform encroachment by Epic / Cerner: workflow depth + data flywheel compound while their 18+ month integration cycles run. We don't outrun them forever — we use the window to make ourselves indispensable.</textarea>
         </div>
       </div>
     </div>
@@ -1146,7 +1171,7 @@ function topCogs() {
 }
 
 // ============ PRICING ============
-const priceFields = ['priceModel', 'priceStrategy', 'priceUnit', 'priceBase', 'priceUnitFee', 'priceUnits', 'priceTierUplift', 'priceY1Customers', 'priceSavingsDetected', 'priceSavingsPct'];
+const priceFields = ['priceModel', 'priceStrategy', 'priceUnit', 'priceBase', 'priceUnitFee', 'priceUnits', 'priceTierUplift', 'priceY1Customers', 'priceSavingsDetected', 'priceSavingsPct', 'priceBillingMonths', 'priceVolumeRisk'];
 let outcomeMode = 'per_unit';
 
 function setOutcomeMode(mode) {
@@ -1161,9 +1186,11 @@ function setOutcomeMode(mode) {
 
 function outcomeRevenue() {
   if (outcomeMode === 'pct_savings') {
-    const savings = parseFloat($('priceSavingsDetected').value) || 0;
+    const annualSavings = parseFloat($('priceSavingsDetected').value) || 0;
     const pct = parseFloat($('priceSavingsPct').value) || 0;
-    return savings * (pct / 100);
+    const volumeRisk = parseFloat($('priceVolumeRisk').value) || 0;
+    const effectiveSavings = annualSavings * (1 - volumeRisk / 100);
+    return (effectiveSavings * (pct / 100)) / 12;
   }
   const ppu = parseFloat($('priceUnitFee').value) || 0;
   const units = parseFloat($('priceUnits').value) || 0;
@@ -1304,11 +1331,19 @@ function updateAll() {
 
   // Savings outcome preview
   if (outcomeMode === 'pct_savings') {
-    const sav = parseFloat($('priceSavingsDetected').value) || 0;
+    const annSav = parseFloat($('priceSavingsDetected').value) || 0;
     const pct = parseFloat($('priceSavingsPct').value) || 0;
-    const oRev = sav * (pct / 100);
-    $('valOutcomePct').textContent = oRev > 0 ? '$' + oRev.toFixed(0) : '$—';
-    $('valOutcomePctSub').textContent = '$' + sav.toLocaleString() + ' × ' + pct + '%';
+    const volRisk = parseFloat($('priceVolumeRisk').value) || 0;
+    const billingMo = parseFloat($('priceBillingMonths').value) || 18;
+    const effectiveSav = annSav * (1 - volRisk / 100);
+    const monthlyRev = (effectiveSav * (pct / 100)) / 12;
+    const accrualTotal = monthlyRev * billingMo;
+    $('valOutcomePct').textContent = monthlyRev > 0 ? '$' + monthlyRev.toFixed(0) : '$—';
+    $('valOutcomePctSub').textContent = volRisk > 0
+      ? '$' + annSav.toLocaleString() + '/yr × ' + pct + '% ÷ 12 (−' + volRisk + '% vol risk)'
+      : '$' + annSav.toLocaleString() + '/yr × ' + pct + '% ÷ 12';
+    $('valAccrualTotal').textContent = accrualTotal > 0 ? '$' + accrualTotal.toLocaleString(undefined, {maximumFractionDigits: 0}) : '$—';
+    $('valAccrualSub').textContent = '$' + monthlyRev.toFixed(0) + '/mo × ' + billingMo + ' months';
   }
 
   // Pricing
@@ -1625,7 +1660,7 @@ Path: ${path === 'A' ? 'A — Standalone' : path === 'B' ? 'B — Pure Halo / Ti
 - Unit: ${s.priceUnit || '—'}
 - Outcome mode: ${outcomeMode === 'pct_savings' ? '% of savings' : '$ per unit'}
 ${outcomeMode === 'pct_savings'
-  ? `- Savings detected/customer/mo: $${s.priceSavingsDetected || '0'} · Share: ${s.priceSavingsPct || '0'}%\n- Outcome revenue/customer/mo: $${outcomeRevenue().toFixed(0)}`
+  ? `- Annual savings/customer: $${s.priceSavingsDetected || '0'} · Share: ${s.priceSavingsPct || '0'}% · Vol risk: ${s.priceVolumeRisk || '0'}%\n- Billing accrual: ${s.priceBillingMonths || '18'} months\n- Outcome revenue/customer/mo: $${outcomeRevenue().toFixed(0)}`
   : `- Base/mo: $${s.priceBase || '0'} · Per-unit: $${s.priceUnitFee || '0'} · Units/mo: ${s.priceUnits || '0'}`}
 - Tier uplift (Path B/C): $${s.priceTierUplift || '0'}
 - Implied revenue/customer/mo: $${rev.toFixed(0)}
