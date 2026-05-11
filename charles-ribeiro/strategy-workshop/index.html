@@ -817,14 +817,14 @@ body {
             <div class="hint" id="slVolHint" style="margin-top: 4px; color: var(--text-muted); font-size: 10px;">1.0x = your current usage assumption. Slide right to simulate heavy-user growth.</div>
           </div>
           <div class="slider-row">
-            <label>Frontier tier share (if added later) <span id="slCascVal">0%</span></label>
-            <input type="range" id="slCasc" min="0" max="50" value="0">
-            <div class="hint" id="slCascHint" style="margin-top: 4px; color: var(--text-muted); font-size: 10px;">Today: vendor uses Claude Sonnet for everything (no routing). 0% = baseline. Slide right to simulate adding a frontier-tier (Opus) for premium ops like governance pack generation.</div>
+            <label>Frontier share (Sonnet) <span id="slCascVal">100%</span></label>
+            <input type="range" id="slCasc" min="0" max="100" value="100">
+            <div class="hint" id="slCascHint" style="margin-top: 4px; color: var(--text-muted); font-size: 10px;">Today: 100% — vendor runs everything on Claude Sonnet. Reduce to route simple ops to the cheap tier.</div>
           </div>
           <div class="slider-row">
-            <label>Cheap-tier routing share <span style="font-size: 10px; color: var(--green); font-weight: 600;">Q4 LEVER</span> <span id="slHaikuVal">0%</span></label>
-            <input type="range" id="slHaiku" min="0" max="80" value="0">
-            <div class="hint" id="slHaikuHint" style="margin-top: 4px; color: var(--text-muted); font-size: 10px;">Today: 0% (vendor on Sonnet for all features). Simulates routing simple ops (cost-variance dashboards, recommendations) to Haiku — Sonnet stays on chat + governance packs. Each % saved is real margin upside for Q4.</div>
+            <label>Cheap-tier share (Haiku) <span style="font-size: 10px; color: var(--green); font-weight: 600;">Q4 LEVER</span> <span id="slHaikuVal">0%</span></label>
+            <input type="range" id="slHaiku" min="0" max="100" value="0">
+            <div class="hint" id="slHaikuHint" style="margin-top: 4px; color: var(--text-muted); font-size: 10px;">Today: 0%. Route cost-variance dashboards and recommendations to Haiku — Sonnet stays on chat + governance packs. Each % is real margin upside.</div>
           </div>
 
           <div class="results" style="margin-top: 20px;">
@@ -1203,13 +1203,11 @@ function calcMargin() {
 }
 
 function calcMarginAt(costMul, volMul, frontierShare, haikuShare) {
-  // Baseline COGS = vendor's current architecture (Claude Sonnet for everything via Bedrock)
-  // frontierShare 0..0.5: % routed UP to Opus-tier for premium ops (~3x Sonnet cost)
-  // haikuShare 0..0.8: % routed DOWN to Haiku for simple ops (~25% Sonnet cost = 75% saving on that share)
-  const FRONTIER_MULTIPLIER = 3;   // Opus ~3x Sonnet
-  const HAIKU_SAVING = 0.75;       // Haiku ~25% Sonnet cost
+  // frontierShare + haikuShare always = 1.0
+  // Frontier (Sonnet) = 1.0x cost, Cheap (Haiku) = 0.25x cost
+  const HAIKU_COST_RATIO = 0.25;
   const baseCogs = totalCogs();
-  const archMul = (1 + frontierShare * (FRONTIER_MULTIPLIER - 1)) * (1 - haikuShare * HAIKU_SAVING);
+  const archMul = frontierShare * 1.0 + haikuShare * HAIKU_COST_RATIO;
   const cogs = baseCogs * volMul * costMul * archMul;
   const rev = impliedRevenue();
   if (rev <= 0) return null;
@@ -1217,11 +1215,16 @@ function calcMarginAt(costMul, volMul, frontierShare, haikuShare) {
 }
 
 // Sliders
-['slCost', 'slVol', 'slCasc', 'slHaiku'].forEach(id => {
-  $(id).addEventListener('input', () => {
-    updateSensitivity();
-    save();
-  });
+['slCost', 'slVol'].forEach(id => {
+  $(id).addEventListener('input', () => { updateSensitivity(); save(); });
+});
+$('slCasc').addEventListener('input', () => {
+  $('slHaiku').value = 100 - parseInt($('slCasc').value);
+  updateSensitivity(); save();
+});
+$('slHaiku').addEventListener('input', () => {
+  $('slCasc').value = 100 - parseInt($('slHaiku').value);
+  updateSensitivity(); save();
 });
 
 function updateSensitivity() {
@@ -1239,22 +1242,21 @@ function updateSensitivity() {
   if (baseCogs > 0) {
     $('slCostHint').textContent = `1.0x = $${baseCogs.toFixed(0)} COGS (your Sonnet baseline) · current = $${(baseCogs * costMul).toFixed(0)} (${costMul >= 1 ? '+' : '−'}${Math.abs((costMul - 1) * 100).toFixed(0)}%)`;
     $('slVolHint').textContent = `1.0x = your current usage · current = ${volMul.toFixed(2)}x volume → $${(baseCogs * volMul).toFixed(0)} COGS at base cost`;
-    if (frontierShare > 0) {
-      const fMul = 1 + frontierShare * 2;
-      $('slCascHint').textContent = `${Math.round(frontierShare * 100)}% routed to Opus → adds ~$${(baseCogs * (fMul - 1)).toFixed(0)} COGS for that tier`;
+    const saved = baseCogs * (1 - (frontierShare + haikuShare * 0.25));
+    if (frontierShare < 1) {
+      $('slCascHint').textContent = `${Math.round(frontierShare * 100)}% on Sonnet · ${Math.round(haikuShare * 100)}% on Haiku → saves ~$${saved.toFixed(0)} COGS/customer/month vs. 100% Sonnet`;
     } else {
-      $('slCascHint').textContent = `Today: vendor uses Claude Sonnet for everything (no routing). Slide right to simulate adding Opus for premium ops.`;
+      $('slCascHint').textContent = `100% on Sonnet — current baseline. Slide left to route simple ops to Haiku.`;
     }
     if (haikuShare > 0) {
-      const saved = baseCogs * haikuShare * 0.75;
       $('slHaikuHint').innerHTML = `<strong style="color: var(--green);">${Math.round(haikuShare * 100)}% routed to Haiku → saves ~$${saved.toFixed(0)} COGS/customer/month</strong> · annualized: $${(saved * 12).toFixed(0)}/customer/year`;
     } else {
-      $('slHaikuHint').textContent = `Today: 0% (vendor on Sonnet for all features). Simulates routing simple ops (cost-variance dashboards, recommendations) to Haiku — Sonnet stays on chat + governance packs.`;
+      $('slHaikuHint').textContent = `0% on Haiku — everything runs on Sonnet. Slide right to route simple ops to Haiku for Q4 margin upside.`;
     }
   } else {
     $('slCostHint').textContent = '1.0x = $— (enter AI COGS in Section 2 to activate)';
     $('slVolHint').textContent = '1.0x = your current usage assumption';
-    $('slCascHint').textContent = 'Vendor on Sonnet today; enter COGS in Section 2 to see cost impact';
+    $('slCascHint').textContent = '100% Sonnet today; enter COGS in Section 2 to see cost impact';
     $('slHaikuHint').textContent = 'Q4 cost-down lever; enter COGS in Section 2 to see savings';
   }
 
