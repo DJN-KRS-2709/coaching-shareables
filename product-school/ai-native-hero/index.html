@@ -103,6 +103,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:22px c
 .spots{color:var(--scarce);font-weight:700;font-family:Poppins;font-size:12.5px;display:inline-flex;align-items:center;gap:6px}
 .spots::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--scarce);box-shadow:0 0 8px var(--scarce);animation:pulse 1.6s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.forwho{max-width:760px;margin:-10px auto 26px;border-left:2px solid rgba(120,140,255,.45);padding-left:16px;opacity:0}
+.forwho.in{animation:rise .5s forwards}
+.forwho .eye{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accentC);margin-bottom:5px}
+.forwho p{margin:0;color:var(--mut);font-size:14.5px}
 .outcome{max-width:760px;margin:26px auto 0;background:linear-gradient(110deg,rgba(120,140,255,.14),rgba(168,85,247,.12));
   border:1px solid rgba(120,140,255,.3);border-radius:var(--r);padding:18px 22px;text-align:center;opacity:0}
 .outcome.in{animation:rise .6s .1s forwards}
@@ -140,18 +144,20 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:22px c
         <button class="btn grad go" id="goBtn">Build my path →</button>
       </div>
       <div class="chips" id="chips">
-        <span class="chip" data-q="I want to break into product management from a non-PM role">Breaking into PM</span>
+        <span class="chip" data-q="I want to land my first product role">Land your first product role</span>
+        <span class="chip" data-q="I want to become an AI product manager and build AI-powered products">Become an AI Product Manager</span>
+        <span class="chip" data-q="I lead a product team and want to lead effectively in the AI era">Lead effectively in the AI era</span>
         <span class="chip" data-q="I'm a senior PM and want to ship AI features myself without waiting on engineering">Senior PM, ship AI</span>
         <span class="chip" data-q="I'm an engineer who wants to think like a product builder">Engineer → builder</span>
-        <span class="chip" data-q="I lead a product team and need an AI product strategy">Leading a team</span>
         <span class="chip" data-q="I'm a designer who wants to prototype and ship real products">Designer who builds</span>
       </div>
-      <div class="finehint mono">↵ press enter — this is a concept; paths are generated from the live catalog</div>
+      <div class="finehint mono">↵ first three are PS's proven segments — or describe yourself in your own words</div>
     </div>
   </div>
 
   <div class="result" id="result" hidden>
     <div class="diag" id="diag"></div>
+    <div class="forwho" id="forwho"><div class="eye">Who this path is for</div><p id="forwhotxt"></p></div>
     <div class="path" id="path"></div>
     <div class="outcome" id="outcome"></div>
     <div class="resfoot" id="resfoot">
@@ -184,36 +190,25 @@ const COURSES = {
 };
 
 const ARCHETYPES = [
-  { id:"switcher", kw:["break into","switch","new to product","aspiring","junior","transition","non-pm","get into"],
-    label:"someone moving into product who wants to build, not just plan",
-    path:["pm","aipm","vibe"],
-    whys:["Ground the fundamentals — what great products and PMs actually do.",
-          "Add the AI layer the moment you have the basics: build AI-powered products.",
-          "Ship something real with AI by the end — a portfolio piece, not a plan."],
-    outcome:"By cohort end you'll have shipped a working AI prototype — the proof a first PM role now asks for." },
-  { id:"senior", kw:["senior","staff","principal","ship ai","without waiting","without eng","experienced","lead pm","seasoned"],
-    label:"a senior PM who wants to ship AI features without waiting on engineering",
-    path:["aipm","claude","evals"],
-    whys:["Reframe your craft for AI-native products — strategy, trust, evaluation.",
-          "Prototype and ship with Claude Code before a ticket is written.",
-          "Make it reliable: design the eval pipelines that let AI products actually ship."],
-    outcome:"You'll go from speccing features to shipping AI prototypes yourself — and knowing they're production-ready." },
-  { id:"engineer", kw:["engineer","developer","technical","software","coder","backend","frontend","sde"],
-    label:"an engineer who wants to think and decide like a product builder",
-    path:["aipm","agents","evals"],
-    whys:["Pair your build skills with product judgment — what to build and why.",
-          "Go deep on multi-agent systems you can architect end-to-end.",
-          "Own quality: evaluation pipelines for non-deterministic AI systems."],
-    outcome:"You'll add the product-builder judgment layer that turns strong engineering into shipped, valuable AI products." },
-  { id:"leader", kw:["lead a","leading","manager","director","vp","head of","cpo","team","org","strategy","executive","chief"],
+  { id:"leader", kw:["lead a","leading","lead effectively","manager","director","vp","head of","cpo","team","org","strategy","executive","chief"],
     label:"a leader who needs an AI product strategy and a team that ships",
+    forwho:"Product leaders, heads of product, and managers steering a team through the shift to AI-native products.",
     path:["strat","lead","agents"],
     whys:["Build the AI product strategy: where to play, what to bet on, how to sequence.",
           "Lead AI-first teams and make the tradeoffs that create durable advantage.",
           "Understand the agentic systems your teams will build — enough to steer them."],
     outcome:"You'll leave with an AI strategy you can defend to your exec team and a model for leading builders." },
+  { id:"engineer", kw:["engineer","developer","technical","software","coder","backend","frontend","sde"],
+    label:"an engineer who wants to think and decide like a product builder",
+    forwho:"Engineers and technical builders who want to own what to build and why — not just how.",
+    path:["aipm","agents","evals"],
+    whys:["Pair your build skills with product judgment — what to build and why.",
+          "Go deep on multi-agent systems you can architect end-to-end.",
+          "Own quality: evaluation pipelines for non-deterministic AI systems."],
+    outcome:"You'll add the product-builder judgment layer that turns strong engineering into shipped, valuable AI products." },
   { id:"designer", kw:["designer","design","ux","ui","prototyp"],
     label:"a designer who wants to prototype and ship real products",
+    forwho:"Designers who want to move from screens to shipped, working products.",
     path:["vibe","claude","aipm"],
     whys:["Turn ideas into high-fidelity, working prototypes — fast, without eng.",
           "Go further with Claude Code: build and analyze, not just mock up.",
@@ -221,13 +216,38 @@ const ARCHETYPES = [
     outcome:"You'll move from screens to shipped products — building end-to-end with AI." },
   { id:"growth", kw:["growth","gtm","go to market","launch","marketing","adoption","monetiz","revenue"],
     label:"a builder focused on growth and getting AI products adopted",
+    forwho:"Growth, GTM, and marketing builders focused on getting AI products adopted.",
     path:["gtm","exp","aipm"],
     whys:["Position and launch AI products so the right users actually adopt them.",
           "Run systematic experiments that compound into revenue growth.",
           "Connect it back to building AI-powered products customers value."],
     outcome:"You'll pair go-to-market and experimentation with AI building — growth you can engineer." },
+  { id:"senior", kw:["senior","staff","principal","ship ai","without waiting","without eng","experienced","lead pm","seasoned"],
+    label:"a senior PM who wants to ship AI features without waiting on engineering",
+    forwho:"Experienced PMs who want to build and ship AI features themselves, faster.",
+    path:["aipm","claude","evals"],
+    whys:["Reframe your craft for AI-native products — strategy, trust, evaluation.",
+          "Prototype and ship with Claude Code before a ticket is written.",
+          "Make it reliable: design the eval pipelines that let AI products actually ship."],
+    outcome:"You'll go from speccing features to shipping AI prototypes yourself — and knowing they're production-ready." },
+  { id:"aipm", kw:["become an ai","ai product manager","ai pm","ai-powered","build ai","into ai"],
+    label:"someone aiming to become an AI Product Manager",
+    forwho:"PMs and aspiring AI PMs ready to bridge product and AI and build AI-powered products.",
+    path:["pm","aipm","claude"],
+    whys:["Lock in the product fundamentals great AI PMs are built on.",
+          "Bridge product and AI — build AI-powered products that create real customer value.",
+          "Ship with Claude Code: prototype and build before a ticket is written."],
+    outcome:"You'll move from PM to AI PM with a shipped, AI-powered product to show for it." },
+  { id:"switcher", kw:["break into","switch","new to product","aspiring","junior","transition","non-pm","get into","first product role","my first","land my first","land your first"],
+    label:"someone moving into product who wants to build, not just plan",
+    forwho:"Career switchers, early-career professionals, and aspiring PMs landing their first role.",
+    path:["pm","aipm","vibe"],
+    whys:["Ground the fundamentals — what great products and PMs actually do.",
+          "Add the AI layer the moment you have the basics: build AI-powered products.",
+          "Ship something real with AI by the end — a portfolio piece, not a plan."],
+    outcome:"By cohort end you'll have shipped a working AI prototype — the proof a first PM role now asks for." },
 ];
-const DEFAULT = ARCHETYPES[1];
+const DEFAULT = ARCHETYPES.find(a=>a.id==="aipm");
 
 function pick(text){
   const t=(text||"").toLowerCase();
@@ -241,6 +261,8 @@ function pick(text){
 
 const result=document.getElementById('result'),
       diag=document.getElementById('diag'),
+      forwho=document.getElementById('forwho'),
+      forwhotxt=document.getElementById('forwhotxt'),
       pathEl=document.getElementById('path'),
       outcome=document.getElementById('outcome'),
       resfoot=document.getElementById('resfoot'),
@@ -265,9 +287,12 @@ function render(text){
   const a=pick(text);
   result.hidden=false;
   pathEl.innerHTML=''; outcome.classList.remove('in'); resfoot.classList.remove('in'); freshrow.style.opacity=0;
+  forwho.classList.remove('in');
   result.scrollIntoView({behavior:'smooth',block:'start'});
 
   typeLine(diag, `Got it — you're <b>${a.label}</b>. Here's the builder path I'd start you on:`, ()=>{
+    forwhotxt.textContent=a.forwho;
+    forwho.classList.add('in');
     a.path.forEach((key,idx)=>{
       const c=COURSES[key];
       const node=document.createElement('div');
