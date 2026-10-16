@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context is the work · Dejan Krstic · Experience Summit</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ink: #0E0E0E;
+  --ink-soft: #2E2E2E;
+  --muted: #4A4A4A;
+  --bg: #F3F2EF;
+  --surface: #FFFFFF;
+  --line: #E4E3DD;
+  --accent: #2B59FF;
+  --accent-ink: #1B3FCC;
+  --accent-soft: #9DB2FF;
+  --accent-bg: #ECF0FF;
+  --display: 'Anton', 'Arial Narrow', sans-serif;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink-soft);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.011em;
+}
+::selection { background: #B8D0FF; color: var(--ink); }
+
+section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  padding: 80px 72px 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  background: var(--bg);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+section.visible { opacity: 1; transform: none; }
+
+.display {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.92;
+  color: var(--ink);
+}
+.accent { color: var(--accent); }
+
+.nav-dots {
+  position: fixed; right: 12px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 2px; z-index: 100;
+}
+.nav-dot {
+  width: 44px; height: 44px; border: none; background: transparent; cursor: pointer;
+  position: relative;
+}
+.nav-dot::after {
+  content: '';
+  position: absolute; left: 18px; top: 18px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--line);
+}
+.nav-dot.active::after { background: var(--accent); transform: scale(1.35); }
+.nav-dot:hover::after { background: var(--accent-ink); }
+.nav-dot:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.nav-dot .tooltip {
+  position: absolute; right: 44px; top: 50%; transform: translateY(-50%);
+  background: var(--ink); color: #fff; padding: 6px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; white-space: nowrap;
+  opacity: 0; pointer-events: none;
+}
+.nav-dot:hover .tooltip { opacity: 1; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 100;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.brand {
+  font-family: var(--display);
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+.tag {
+  display: inline-flex; align-items: center;
+  background: var(--ink); color: #fff;
+  font-weight: 600; font-size: 0.7rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.5em 0.95em; border-radius: 999px; line-height: 1;
+}
+.tag--ghost {
+  background: transparent; color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.meta { font-size: 16px; color: var(--muted); line-height: 1.6; }
+
+.blob {
+  width: clamp(72px, 9vw, 120px); aspect-ratio: 1 / 1.12;
+  background:
+    radial-gradient(120% 120% at 32% 26%, #7E97FF 0%, var(--accent) 48%, var(--accent-ink) 100%);
+  border-radius: 48% 52% 56% 44% / 56% 46% 54% 44%;
+  box-shadow: inset -10px -14px 26px rgba(13,30,120,.45), inset 10px 12px 22px rgba(255,255,255,.35),
+    0 22px 40px rgba(43,89,255,.32);
+  animation: blobMorph 9s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes blobMorph {
+  0%,100% { border-radius: 48% 52% 56% 44% / 56% 46% 54% 44%; transform: rotate(0deg); }
+  50% { border-radius: 54% 46% 44% 56% / 44% 56% 46% 54%; transform: rotate(-4deg); }
+}
+
+/* Hero: coaching site */
+.hero { align-items: center; text-align: center; }
+.hero .brand { margin-bottom: 28px; }
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  line-height: 0.92;
+  font-size: clamp(2.75rem, 8vw, 7rem);
+  color: var(--ink);
+  max-width: 12ch;
+}
+.hero-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  margin-top: 8px;
+}
+.hero .lead {
+  margin-top: 28px;
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 36ch;
+  line-height: 1.55;
+}
+.hero-meta { margin-top: 36px; font-size: 15px; color: var(--muted); line-height: 1.7; }
+
+/* Statement slides */
+.statement { align-items: flex-start; }
+.statement .tag { margin-bottom: 28px; }
+.statement h2.display {
+  font-size: clamp(3rem, 8.5vw, 6.8rem);
+  max-width: 14ch;
+}
+.statement .lead {
+  margin-top: 28px;
+  font-size: 22px;
+  color: var(--ink-soft);
+  max-width: 36ch;
+  line-height: 1.45;
+}
+
+/* Ink punches */
+section.ink {
+  background: var(--ink);
+  color: #E9E9E9;
+}
+section.ink h2.display { color: #fff; }
+section.ink .lead { color: #C8C8C8; }
+section.ink .tag { background: var(--accent); color: #fff; }
+
+/* Two columns like the site approach row */
+.split {
+  width: min(1040px, 100%);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.split article {
+  padding: 48px 40px 8px 0;
+}
+.split article + article {
+  padding-left: 48px;
+  border-left: 1px solid var(--line);
+}
+.split .col-label {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  color: rgba(14,14,14,0.28);
+  margin-bottom: 16px;
+}
+.split h3 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.12;
+  margin-bottom: 12px;
+}
+.split p { font-size: 18px; color: var(--ink-soft); line-height: 1.5; max-width: 28ch; }
+
+/* Confidence Line */
+.line-wrap { width: min(960px, 100%); }
+.line-wrap .tag { margin-bottom: 24px; }
+.line-wrap h2.display {
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+  margin-bottom: 40px;
+  max-width: 12ch;
+}
+.cl { position: relative; padding: 32px 0 0; }
+.cl-commit-label {
+  font-size: 13px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent);
+  position: absolute; left: 62%; top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.cl-track {
+  position: relative;
+  height: 8px;
+  background: var(--line);
+  border-radius: 999px;
+  margin: 28px 0 16px;
+  overflow: hidden;
+}
+.cl-fill {
+  height: 100%;
+  width: 62%;
+  background: linear-gradient(90deg, #C8C8C8 0%, var(--accent) 100%);
+  border-radius: 999px;
+}
+.cl-threshold {
+  position: absolute;
+  left: 62%;
+  top: -28px;
+  width: 2px;
+  height: calc(100% + 28px);
+  background: var(--accent);
+}
+.cl-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 36px;
+}
+.cl-phases {
+  display: grid;
+  grid-template-columns: 62% 38%;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.cl-phase { padding-right: 32px; }
+.cl-phase + .cl-phase {
+  padding-left: 32px;
+  padding-right: 0;
+  border-left: 3px solid var(--accent);
+}
+.cl-phase-label {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 10px;
+}
+.cl-phase + .cl-phase .cl-phase-label { color: var(--accent); }
+.cl-phase-body {
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  font-weight: 600; color: var(--ink); line-height: 1.35;
+}
+.cl-phase + .cl-phase .cl-phase-body { color: var(--accent-ink); }
+
+/* Toy vs Tool classifier */
+.tvt-wrap { width: min(1080px, 100%); }
+.tvt-wrap .tag { margin-bottom: 24px; }
+.tvt-wrap h2.display {
+  font-size: clamp(2.6rem, 6vw, 5.2rem);
+  margin-bottom: 32px;
+  max-width: 12ch;
+}
+.tvt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.build {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 20px 56px;
+}
+.phone {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+.phone-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.phone-prompt {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+  margin-bottom: 16px;
+}
+.phone-ui {
+  display: grid;
+  gap: 8px;
+}
+.phone-tile {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.phone-cta {
+  margin-top: 4px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+.checks {
+  list-style: none;
+  margin: 20px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.checks li {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(8px);
+}
+.tvt.run .checks li { opacity: 1; transform: none; transition: opacity 0.35s ease, transform 0.35s ease; }
+.tvt.run .build[data-verdict="toy"] .checks li:nth-child(1) { transition-delay: 0.35s; }
+.tvt.run .build[data-verdict="toy"] .checks li:nth-child(2) { transition-delay: 0.55s; }
+.tvt.run .build[data-verdict="toy"] .checks li:nth-child(3) { transition-delay: 0.75s; }
+.tvt.run .build[data-verdict="tool"] .checks li:nth-child(1) { transition-delay: 1.15s; }
+.tvt.run .build[data-verdict="tool"] .checks li:nth-child(2) { transition-delay: 1.35s; }
+.tvt.run .build[data-verdict="tool"] .checks li:nth-child(3) { transition-delay: 1.55s; }
+.check-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.checks li.fail .check-mark { background: var(--ink); color: #fff; }
+.checks li.pass .check-mark { background: var(--accent); color: #fff; border-color: var(--accent); }
+.stamp {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  font-family: var(--display);
+  font-size: 2.4rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  opacity: 0;
+  transform: rotate(-8deg) scale(1.15);
+}
+.tvt.run .stamp {
+  opacity: 1;
+  transform: rotate(-8deg) scale(1);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.tvt.run .build[data-verdict="toy"] .stamp { color: var(--ink); transition-delay: 1s; }
+.tvt.run .build[data-verdict="tool"] .stamp { color: var(--accent); transition-delay: 1.85s; }
+.replay {
+  margin-top: 24px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.replay:hover { background: var(--ink); color: #fff; }
+.replay:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+section.proto {
+  padding: 0;
+  justify-content: stretch;
+  background: #050505;
+}
+section.proto.tool-slide { background: #E8E4D8; }
+section.proto iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  border: 0;
+  display: block;
+}
+.proto-flag {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 20;
+}
+
+/* Four verbs: site logo wall */
+.verbs { align-items: center; text-align: center; }
+.verbs .tag { margin-bottom: 32px; }
+.verb-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4rem 2.6rem;
+}
+.verb-row span {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  color: rgba(14,14,14,0.22);
+  line-height: 0.92;
+}
+.verb-row span.on { color: var(--accent); }
+
+/* Close */
+.close { align-items: center; text-align: center; }
+.close h2.display {
+  font-size: clamp(2.8rem, 7vw, 5.6rem);
+  max-width: 16ch;
+}
+.close .lead {
+  margin-top: 28px;
+  font-size: 20px;
+  color: var(--ink-soft);
+  max-width: 38ch;
+  line-height: 1.5;
+}
+.close .hero-meta { margin-top: 40px; }
+
+.help-hint {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: var(--muted); z-index: 90;
+  white-space: nowrap; pointer-events: none;
+}
+.skip-badge {
+  display: none; position: fixed; top: 16px; left: 24px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); background: var(--surface); border: 1.5px solid var(--ink);
+  padding: 8px 14px; border-radius: 999px; z-index: 150; cursor: pointer;
+}
+.skip-badge.visible { display: block; }
+.skip-badge:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.slide-sorter {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: var(--bg); overflow-y: auto; padding: 60px 40px 40px;
+}
+.slide-sorter.visible { display: block; }
+.sorter-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  max-width: 1200px; margin: 0 auto 32px;
+}
+.sorter-title { font-size: 24px; font-weight: 800; color: var(--ink); }
+.sorter-subtitle { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.sorter-close {
+  width: 44px; height: 44px; border-radius: 999px; border: 1.6px solid var(--ink);
+  background: var(--surface); color: var(--ink); font-size: 18px; cursor: pointer;
+}
+.sorter-close:hover { background: var(--ink); color: #fff; }
+.sorter-close:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sorter-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px; max-width: 1200px; margin: 0 auto;
+}
+.sorter-item {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 16px; cursor: pointer;
+}
+.sorter-item:hover, .sorter-item.sorter-active { border-color: var(--accent); }
+.sorter-item.sorter-skipped { opacity: 0.4; }
+.sorter-num { font-size: 11px; font-weight: 800; color: var(--accent-ink); margin-bottom: 6px; }
+.sorter-label { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 10px; min-height: 36px; }
+.sorter-skip-btn {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 8px 10px; border-radius: 999px; border: 1.5px solid var(--ink); cursor: pointer;
+  background: var(--surface); color: var(--ink);
+}
+.sorter-skip-btn.skip-on { background: var(--ink); color: #fff; }
+section.skipped { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  section { opacity: 1; transform: none; transition: none; }
+  .blob { animation: none; }
+  .tvt .checks li,
+  .tvt .stamp {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tvt.run .build[data-verdict="toy"] .stamp,
+  .tvt.run .build[data-verdict="tool"] .stamp { transform: rotate(-8deg); }
+}
+@media (max-width: 820px) {
+  section { padding: 56px 28px; }
+  .hero h1 { font-size: 3rem; }
+  .statement h2.display { font-size: 2.6rem; }
+  .split { grid-template-columns: 1fr; }
+  .split article { padding: 28px 0; }
+  .split article + article { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .cl-phases { grid-template-columns: 1fr; }
+  .cl-phase + .cl-phase { padding-left: 0; border-left: 0; border-top: 3px solid var(--accent); padding-top: 24px; margin-top: 8px; }
+  .tvt { grid-template-columns: 1fr; }
+  .nav-dots { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots" aria-label="Slides"></nav>
+
+<section class="hero" data-title="Title">
+  <div class="brand">Dejan</div>
+  <div class="hero-row">
+    <h1>Context is the <span class="accent">work</span></h1>
+    <span class="blob" aria-hidden="true"></span>
+  </div>
+  <p class="lead">Designing and building products with AI, after the prototype got cheap.</p>
+  <p class="hero-meta">
+    Experience Summit · Prague<br>
+    Dejan Krstic · CPO, Product School
+  </p>
+</section>
+
+<section class="statement" data-title="Hands">
+  <span class="tag tag--ghost">Hands up</span>
+  <h2 class="display">Who shipped something with AI in the last 90 days?</h2>
+</section>
+
+<section class="statement" data-title="An afternoon">
+  <span class="tag">The gift</span>
+  <h2 class="display">I built this in an afternoon.</h2>
+  <p class="lead">So can anyone in this room. That is not the hard part anymore.</p>
+</section>
+
+<section class="statement ink" data-title="Looks like a product">
+  <span class="tag">The trap</span>
+  <h2 class="display">Looks like a product.</h2>
+  <p class="lead">A costume is not shared understanding.</p>
+</section>
+
+<section class="proto" data-title="The costume">
+  <span class="proto-flag tag">Toy · Home</span>
+  <iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;ATLAS · Journey Intelligence&lt;/title&gt;
+&lt;style&gt;
+@import url(&#x27;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap&#x27;);
+:root {
+  --bg:    #04040A;
+  --panel: #0C0C16;
+  --card:  #101020;
+  --line:  #1A1A2E;
+  --line2: #222238;
+  --cream: #E8E8F4;
+  --dim:   #9090B0;
+  --mute:  #505068;
+  --teal:  #4ECDC4;
+  --teal2: #38B2AA;
+  --teal3: #26969E;
+  --glow:  rgba(78,205,196,0.18);
+  --warn:  #FF6B6B;
+  --up:    #4ECD88;
+  --gold:  #F7B731;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--panel);
+  border: 1px solid var(--line2);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(78,205,196,.06), 0 24px 48px rgba(0,0,0,.5);
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.logo {
+  display: flex; align-items: center; gap: 8px;
+}
+.logo-mark {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: linear-gradient(135deg, var(--teal), var(--teal3));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; color: #000; letter-spacing: -0.02em;
+}
+.logo-name {
+  font-size: 12px; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--cream);
+}
+.live-badge {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; color: var(--dim);
+}
+.pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 0 var(--glow);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 var(--glow); }
+  70%  { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  padding: 20px 18px 18px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 140% at 90% -10%, rgba(78,205,196,.14) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 80% at 10% 110%, rgba(78,205,196,.07) 0%, transparent 55%),
+              var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.hero-inner { display: flex; align-items: center; gap: 20px; }
+.score-ring {
+  flex-shrink: 0; position: relative; width: 88px; height: 88px;
+}
+.score-ring svg { position: absolute; inset: 0; }
+.score-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.score-num {
+  font-size: 26px; font-weight: 900; letter-spacing: -0.03em;
+  color: var(--cream); line-height: 1;
+}
+.score-lbl {
+  font-size: 8px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); margin-top: 2px;
+}
+.hero-text { flex: 1; min-width: 0; }
+.hero-title {
+  font-size: 18px; font-weight: 900; line-height: 1.15;
+  letter-spacing: -0.02em; color: var(--cream); margin-bottom: 10px;
+}
+.hero-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.hero-chip {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 4px 9px; border-radius: 999px;
+  border: 1px solid var(--line2); color: var(--dim);
+  background: rgba(255,255,255,0.03);
+}
+.hero-chip.hi { border-color: rgba(78,205,196,.3); color: var(--teal); background: rgba(78,205,196,.07); }
+.hero-chip.lo { border-color: rgba(255,107,107,.3); color: var(--warn); background: rgba(255,107,107,.06); }
+
+/* METRICS ROW */
+.metrics {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+.metric {
+  padding: 14px 14px 12px;
+  border-right: 1px solid var(--line);
+}
+.metric:last-child { border-right: none; }
+.metric-val {
+  font-size: 22px; font-weight: 900; letter-spacing: -0.025em;
+  line-height: 1; color: var(--cream);
+}
+.metric-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--mute); margin-top: 4px;
+}
+.metric-delta {
+  font-size: 10px; font-weight: 700; margin-top: 3px;
+  display: flex; align-items: center; gap: 3px;
+}
+.up-c { color: var(--up); }
+.dn-c { color: var(--warn); }
+
+/* STAGES */
+.stages-wrap { padding: 14px 18px 6px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--mute);
+}
+.section-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--teal);
+  padding: 3px 8px; border-radius: 999px;
+  border: 1px solid rgba(78,205,196,.25);
+  background: rgba(78,205,196,.06);
+}
+
+.stage {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.stage:first-of-type { border-top: none; }
+.stage:hover { background: rgba(255,255,255,0.02); margin: 0 -18px; padding-left: 18px; padding-right: 18px; border-radius: 0; }
+
+.stage-icon {
+  width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; flex-shrink: 0;
+}
+.stage-icon.hi { background: rgba(78,205,136,.12); color: var(--up); }
+.stage-icon.md { background: rgba(78,205,196,.12); color: var(--teal); }
+.stage-icon.lo { background: rgba(255,107,107,.12); color: var(--warn); }
+.stage-icon.yl { background: rgba(247,183,49,.1);  color: var(--gold); }
+
+.stage-name { font-size: 12px; font-weight: 700; color: var(--cream); width: 64px; flex-shrink: 0; }
+.stage-count { font-size: 10px; color: var(--mute); width: 64px; flex-shrink: 0; }
+
+.bar-track { flex: 1; height: 5px; background: var(--line2); border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 999px; }
+
+.score-badge {
+  font-size: 12px; font-weight: 800; letter-spacing: -0.01em;
+  width: 28px; text-align: right; flex-shrink: 0;
+}
+
+/* CTA */
+.cta-wrap { padding: 14px 18px 18px; }
+.cta-btn {
+  width: 100%; padding: 14px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--teal), var(--teal3));
+  color: #001816;
+  font-size: 13px; font-weight: 800; letter-spacing: 0.01em;
+  min-height: 46px;
+  box-shadow: 0 4px 16px rgba(78,205,196,.22);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+.cta-btn:hover { opacity: 0.88; box-shadow: 0 6px 24px rgba(78,205,196,.32); }
+.cta-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--cream); color: #0A0A14;
+  padding: 11px 18px; border-radius: 10px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.18s;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+.toast.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;card&quot;&gt;
+
+  &lt;div class=&quot;topbar&quot;&gt;
+    &lt;div class=&quot;logo&quot;&gt;
+      &lt;div class=&quot;logo-mark&quot;&gt;A&lt;/div&gt;
+      &lt;div class=&quot;logo-name&quot;&gt;Atlas&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;live-badge&quot;&gt;
+      &lt;span class=&quot;pulse&quot;&gt;&lt;/span&gt;
+      Q4 · Live
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;hero&quot;&gt;
+    &lt;div class=&quot;hero-inner&quot;&gt;
+      &lt;div class=&quot;score-ring&quot; aria-label=&quot;Journey health 74&quot;&gt;
+        &lt;svg viewBox=&quot;0 0 88 88&quot; fill=&quot;none&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+          &lt;circle cx=&quot;44&quot; cy=&quot;44&quot; r=&quot;38&quot; stroke=&quot;#1A1A2E&quot; stroke-width=&quot;7&quot;/&gt;
+          &lt;circle cx=&quot;44&quot; cy=&quot;44&quot; r=&quot;38&quot;
+            stroke=&quot;url(#ring-grad)&quot; stroke-width=&quot;7&quot;
+            stroke-linecap=&quot;round&quot;
+            stroke-dasharray=&quot;238.76&quot;
+            stroke-dashoffset=&quot;60.6&quot;
+            transform=&quot;rotate(-90 44 44)&quot;/&gt;
+          &lt;defs&gt;
+            &lt;linearGradient id=&quot;ring-grad&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;88&quot; y2=&quot;88&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+              &lt;stop offset=&quot;0%&quot; stop-color=&quot;#4ECDC4&quot;/&gt;
+              &lt;stop offset=&quot;100%&quot; stop-color=&quot;#38B2AA&quot;/&gt;
+            &lt;/linearGradient&gt;
+          &lt;/defs&gt;
+        &lt;/svg&gt;
+        &lt;div class=&quot;score-center&quot;&gt;
+          &lt;span class=&quot;score-num&quot;&gt;74&lt;/span&gt;
+          &lt;span class=&quot;score-lbl&quot;&gt;Health&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;hero-text&quot;&gt;
+        &lt;div class=&quot;hero-title&quot;&gt;Journey Intelligence&lt;/div&gt;
+        &lt;div class=&quot;hero-chips&quot;&gt;
+          &lt;span class=&quot;hero-chip hi&quot;&gt;+3 vs Q3&lt;/span&gt;
+          &lt;span class=&quot;hero-chip&quot;&gt;5 stages&lt;/span&gt;
+          &lt;span class=&quot;hero-chip lo&quot;&gt;Activate ↓&lt;/span&gt;
+          &lt;span class=&quot;hero-chip&quot;&gt;4,131 signals&lt;/span&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;metrics&quot;&gt;
+    &lt;div class=&quot;metric&quot;&gt;
+      &lt;div class=&quot;metric-val&quot;&gt;4.1k&lt;/div&gt;
+      &lt;div class=&quot;metric-label&quot;&gt;Signals&lt;/div&gt;
+      &lt;div class=&quot;metric-delta up-c&quot;&gt;↑ 12%&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;metric&quot;&gt;
+      &lt;div class=&quot;metric-val&quot;&gt;12&lt;/div&gt;
+      &lt;div class=&quot;metric-label&quot;&gt;Pain points&lt;/div&gt;
+      &lt;div class=&quot;metric-delta dn-c&quot;&gt;↑ 2 new&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;metric&quot;&gt;
+      &lt;div class=&quot;metric-val&quot;&gt;54&lt;/div&gt;
+      &lt;div class=&quot;metric-label&quot;&gt;Activate&lt;/div&gt;
+      &lt;div class=&quot;metric-delta dn-c&quot;&gt;↓ lowest&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;stages-wrap&quot;&gt;
+    &lt;div class=&quot;section-header&quot;&gt;
+      &lt;span class=&quot;section-title&quot;&gt;Stage health&lt;/span&gt;
+      &lt;span class=&quot;section-tag&quot;&gt;AI-mapped&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+      &lt;div class=&quot;stage-icon hi&quot;&gt;D&lt;/div&gt;
+      &lt;span class=&quot;stage-name&quot;&gt;Discover&lt;/span&gt;
+      &lt;span class=&quot;stage-count&quot;&gt;1,240&lt;/span&gt;
+      &lt;div class=&quot;bar-track&quot;&gt;&lt;div class=&quot;bar-fill&quot; style=&quot;width:91%;background:linear-gradient(90deg,#4ECD88,#38B27A)&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;span class=&quot;score-badge&quot; style=&quot;color:var(--up)&quot;&gt;91&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+      &lt;div class=&quot;stage-icon md&quot;&gt;O&lt;/div&gt;
+      &lt;span class=&quot;stage-name&quot;&gt;Onboard&lt;/span&gt;
+      &lt;span class=&quot;stage-count&quot;&gt;847&lt;/span&gt;
+      &lt;div class=&quot;bar-track&quot;&gt;&lt;div class=&quot;bar-fill&quot; style=&quot;width:68%;background:linear-gradient(90deg,#4ECDC4,#38B2AA)&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;span class=&quot;score-badge&quot; style=&quot;color:var(--teal)&quot;&gt;68&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+      &lt;div class=&quot;stage-icon lo&quot;&gt;A&lt;/div&gt;
+      &lt;span class=&quot;stage-name&quot;&gt;Activate&lt;/span&gt;
+      &lt;span class=&quot;stage-count&quot;&gt;612&lt;/span&gt;
+      &lt;div class=&quot;bar-track&quot;&gt;&lt;div class=&quot;bar-fill&quot; style=&quot;width:54%;background:linear-gradient(90deg,#FF6B6B,#E05555)&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;span class=&quot;score-badge&quot; style=&quot;color:var(--warn)&quot;&gt;54&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+      &lt;div class=&quot;stage-icon hi&quot;&gt;R&lt;/div&gt;
+      &lt;span class=&quot;stage-name&quot;&gt;Retain&lt;/span&gt;
+      &lt;span class=&quot;stage-count&quot;&gt;1,038&lt;/span&gt;
+      &lt;div class=&quot;bar-track&quot;&gt;&lt;div class=&quot;bar-fill&quot; style=&quot;width:82%;background:linear-gradient(90deg,#4ECD88,#38B27A)&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;span class=&quot;score-badge&quot; style=&quot;color:var(--up)&quot;&gt;82&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;stage&quot;&gt;
+      &lt;div class=&quot;stage-icon yl&quot;&gt;V&lt;/div&gt;
+      &lt;span class=&quot;stage-name&quot;&gt;Advocate&lt;/span&gt;
+      &lt;span class=&quot;stage-count&quot;&gt;394&lt;/span&gt;
+      &lt;div class=&quot;bar-track&quot;&gt;&lt;div class=&quot;bar-fill&quot; style=&quot;width:61%;background:linear-gradient(90deg,#F7B731,#D4982A)&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;span class=&quot;score-badge&quot; style=&quot;color:var(--gold)&quot;&gt;61&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;cta-wrap&quot;&gt;
+    &lt;button class=&quot;cta-btn&quot; id=&quot;cta&quot; type=&quot;button&quot;&gt;
+      &lt;svg viewBox=&quot;0 0 14 14&quot; fill=&quot;none&quot;&gt;&lt;path d=&quot;M7 1v12M1 7h12&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linecap=&quot;round&quot;/&gt;&lt;/svg&gt;
+      Generate journey report
+    &lt;/button&gt;
+  &lt;/div&gt;
+
+&lt;/div&gt;
+&lt;div class=&quot;toast&quot; id=&quot;toast&quot; role=&quot;status&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+function say(msg) {
+  const t = document.getElementById(&#x27;toast&#x27;);
+  t.textContent = msg;
+  t.classList.add(&#x27;on&#x27;);
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() =&gt; t.classList.remove(&#x27;on&#x27;), 2600);
+}
+document.getElementById(&#x27;cta&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; say(&#x27;Report generated. No hypothesis attached.&#x27;));
+document.querySelectorAll(&#x27;.stage&#x27;).forEach(s =&gt;
+  s.addEventListener(&#x27;click&#x27;, () =&gt; say(&#x27;Stage selected. Nothing to test.&#x27;))
+);
+window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+  if ([&#x27;ArrowDown&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowLeft&#x27;].includes(e.key))
+    parent.postMessage({ type: &#x27;deck-nav&#x27;, key: e.key }, &#x27;*&#x27;);
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" title="ATLAS journey dashboard, a flashy costume"></iframe>
+</section>
+
+<section class="proto tool-slide" data-title="The brief">
+  <span class="proto-flag tag tag--ghost">Tool</span>
+  <iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;One Brief · Journey&lt;/title&gt;
+&lt;style&gt;
+@import url(&#x27;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&#x27;);
+:root {
+  --bg: #E8E4D8;
+  --paper: #F3F0E8;
+  --card: #FDFAF3;
+  --line: #D8D4C4;
+  --ink: #141414;
+  --soft: #2E2C28;
+  --mute: #6A6860;
+  --go: #1A3824;
+  --go-mid: #2A5238;
+  --go-soft: #E2EDE6;
+  --go-label: #1A5C30;
+  --stop: #7A2018;
+  --stop-soft: #F8EDEB;
+  --stop-border: #DFC4BE;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--soft);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+}
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.card-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--go);
+}
+.card-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--mute);
+}
+
+/* INPUT PANE */
+.input-pane { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+
+.hypothesis {
+  font-size: 14px; font-weight: 600; color: var(--go);
+  line-height: 1.45;
+  padding: 12px 14px;
+  background: var(--go-soft);
+  border-left: 3px solid var(--go);
+  border-radius: 0 10px 10px 0;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  font-size: 12px; font-weight: 600; color: var(--soft);
+  background: var(--card); border: 1.5px solid var(--line);
+  border-radius: 999px; padding: 6px 13px; cursor: pointer; line-height: 1.3;
+  transition: border-color 0.12s, color 0.12s;
+}
+.chip:hover, .chip.sel { border-color: var(--go-mid); color: var(--go); }
+
+.build-btn {
+  width: 100%; padding: 14px; border-radius: 12px;
+  background: var(--go); color: #fff;
+  font-size: 14px; font-weight: 800; min-height: 48px;
+}
+.build-btn:hover { background: var(--go-mid); }
+
+.caption {
+  font-size: 11px; color: var(--mute); font-style: italic;
+  padding: 0 2px;
+}
+
+/* OUTPUT PANE */
+.output-pane {
+  display: none; padding: 16px 18px; flex-direction: column; gap: 12px;
+}
+.output-pane.on { display: flex; }
+
+.section { display: flex; flex-direction: column; gap: 4px; }
+.section-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--go-label);
+}
+.section-body { font-size: 12px; color: var(--soft); line-height: 1.55; }
+.section-body strong { color: var(--ink); font-weight: 700; }
+
+.kill-block {
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(122,32,24,0.06);
+  border: 1px solid rgba(122,32,24,0.15);
+}
+.kill-block .section-label { color: var(--stop); }
+.kill-block .section-body { color: var(--stop); font-size: 11px; }
+
+.guardrail {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; color: var(--go-label);
+  padding: 9px 12px; border-radius: 10px;
+  background: var(--go-soft);
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--go-label); flex-shrink: 0; }
+
+.back-row {
+  padding: 0 18px 14px;
+}
+.back-btn {
+  font-size: 12px; font-weight: 700; color: var(--mute);
+  padding: 6px 0; text-decoration: underline; cursor: pointer;
+  background: none; border: none;
+}
+.back-btn:hover { color: var(--ink); }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    &lt;span class=&quot;card-title&quot;&gt;One Brief · Journey&lt;/span&gt;
+    &lt;span class=&quot;card-badge&quot;&gt;Hypothesis&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;!-- INPUT --&gt;
+  &lt;div class=&quot;input-pane&quot; id=&quot;input-pane&quot;&gt;
+    &lt;div class=&quot;hypothesis&quot;&gt;Customers drop off at Activate because they never see value before their first decision.&lt;/div&gt;
+    &lt;div class=&quot;chips&quot; id=&quot;chips&quot;&gt;
+      &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;Activate score 54&lt;/button&gt;
+      &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;No guided first action&lt;/button&gt;
+      &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;Day-7 churn spike&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;button class=&quot;build-btn&quot; id=&quot;build-btn&quot; type=&quot;button&quot;&gt;Build the brief&lt;/button&gt;
+    &lt;p class=&quot;caption&quot;&gt;Activate score 54 is a fact. The reason is a bet.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- OUTPUT --&gt;
+  &lt;div class=&quot;output-pane&quot; id=&quot;output-pane&quot;&gt;
+    &lt;div class=&quot;section&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;The hypothesis&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-hypothesis&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;section&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;The person&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-person&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;section&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;The next step&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-next&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;kill-block&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;Kill condition&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-kill&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;guardrail&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;Guardrails passed · ready to test&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;back-row&quot; id=&quot;back-row&quot; style=&quot;display:none&quot;&gt;
+    &lt;button class=&quot;back-btn&quot; id=&quot;back-btn&quot; type=&quot;button&quot;&gt;← Start over&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const briefs = {
+  activate: {
+    hypothesis: &#x27;Customers drop off at Activate not because the features are hard, but because they never see value before their first decision point.&#x27;,
+    person: &#x27;New accounts who completed Onboard but never reached a meaningful outcome. Capable, but unconvinced.&#x27;,
+    next: &#x27;Surface one guided first-action prompt at login. Measure Activate score at day 7 and day 14.&#x27;,
+    kill: &#x27;If adding a first-win prompt does not move Activate score by 8 points in three weeks, the barrier is not visibility.&#x27;,
+  },
+  guided: {
+    hypothesis: &#x27;Customers stall after onboarding not because the product is complex, but because they have no clear first action to take.&#x27;,
+    person: &#x27;Signups who completed setup but never initiated a core workflow in their first 14 days.&#x27;,
+    next: &#x27;Add one &quot;here is your first step&quot; prompt immediately after setup. A/B test for two weeks.&#x27;,
+    kill: &#x27;If the prompt does not improve Onboard-to-Activate progression by 10 points in four weeks, clarity is not the problem.&#x27;,
+  },
+  churn: {
+    hypothesis: &#x27;The day-7 churn spike is not about product quality. Customers are leaving before they experience the value we built for.&#x27;,
+    person: &#x27;Accounts who logged in on days 1–3 then went silent. They tried, saw nothing worth returning for, and left quietly.&#x27;,
+    next: &#x27;Trigger a personal check-in for every account with no activity after day 3. Track retention at day 7 and day 30.&#x27;,
+    kill: &#x27;If a day-5 check-in does not change day-7 retention by at least 15 points after 30 accounts, timing is not the lever.&#x27;,
+  },
+};
+
+let selectedKey = &#x27;activate&#x27;;
+const chipMap = [&#x27;activate&#x27;, &#x27;guided&#x27;, &#x27;churn&#x27;];
+
+document.getElementById(&#x27;chips&#x27;).addEventListener(&#x27;click&#x27;, (e) =&gt; {
+  const chip = e.target.closest(&#x27;.chip&#x27;);
+  if (!chip) return;
+  const idx = [...chip.parentElement.children].indexOf(chip);
+  document.querySelectorAll(&#x27;.chip&#x27;).forEach(c =&gt; c.classList.remove(&#x27;sel&#x27;));
+  chip.classList.add(&#x27;sel&#x27;);
+  selectedKey = chipMap[idx] || &#x27;activate&#x27;;
+});
+
+document.getElementById(&#x27;build-btn&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+  const b = briefs[selectedKey];
+  document.getElementById(&#x27;out-hypothesis&#x27;).textContent = b.hypothesis;
+  document.getElementById(&#x27;out-person&#x27;).textContent = b.person;
+  document.getElementById(&#x27;out-next&#x27;).textContent = b.next;
+  document.getElementById(&#x27;out-kill&#x27;).textContent = b.kill;
+  document.getElementById(&#x27;input-pane&#x27;).style.display = &#x27;none&#x27;;
+  document.getElementById(&#x27;output-pane&#x27;).classList.add(&#x27;on&#x27;);
+  document.getElementById(&#x27;back-row&#x27;).style.display = &#x27;block&#x27;;
+});
+
+document.getElementById(&#x27;back-btn&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+  document.getElementById(&#x27;output-pane&#x27;).classList.remove(&#x27;on&#x27;);
+  document.getElementById(&#x27;input-pane&#x27;).style.display = &#x27;&#x27;;
+  document.getElementById(&#x27;back-row&#x27;).style.display = &#x27;none&#x27;;
+  document.querySelectorAll(&#x27;.chip&#x27;).forEach(c =&gt; c.classList.remove(&#x27;sel&#x27;));
+  selectedKey = &#x27;activate&#x27;;
+});
+
+window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+  if ([&#x27;ArrowDown&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowLeft&#x27;].includes(e.key))
+    parent.postMessage({ type: &#x27;deck-nav&#x27;, key: e.key }, &#x27;*&#x27;);
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" title="One Brief: a hypothesis you can be wrong about"></iframe>
+</section>
+
+<section class="statement" data-title="The hypothesis">
+  <span class="tag">The product</span>
+  <h2 class="display">The hypothesis is the product.</h2>
+  <p class="lead">The code is just the test.</p>
+</section>
+
+<section data-title="The Confidence Line">
+  <div class="line-wrap">
+    <span class="tag tag--ghost">The Confidence Line</span>
+    <h2 class="display">Spend the least that moves you right.</h2>
+    <div class="cl" aria-hidden="true">
+      <div class="cl-commit-label">Commit</div>
+      <div class="cl-track">
+        <div class="cl-fill"></div>
+        <div class="cl-threshold"></div>
+      </div>
+      <div class="cl-ends">
+        <span>We are guessing</span>
+        <span>We know</span>
+      </div>
+      <div class="cl-phases">
+        <div class="cl-phase">
+          <div class="cl-phase-label">Before commit</div>
+          <div class="cl-phase-body">One afternoon. One page. One thing that can be wrong.</div>
+        </div>
+        <div class="cl-phase">
+          <div class="cl-phase-label">After commit</div>
+          <div class="cl-phase-body">Now invest. Engineering. Distribution. Scale.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="statement ink" data-title="Demo time">
+  <span class="tag">Live</span>
+  <h2 class="display">Easy to say. Let me show you.</h2>
+  <p class="lead">How do you actually move the line? Right now, live, from scratch.</p>
+</section>
+
+<section class="proto tool-slide" data-title="The test" data-default-skip>
+  <span class="proto-flag tag tag--ghost">Tool</span>
+  <iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;One Brief · Journey&lt;/title&gt;
+&lt;style&gt;
+@import url(&#x27;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&#x27;);
+:root {
+  --bg: #E8E4D8;
+  --paper: #F3F0E8;
+  --card: #FDFAF3;
+  --line: #D8D4C4;
+  --ink: #141414;
+  --soft: #2E2C28;
+  --mute: #6A6860;
+  --go: #1A3824;
+  --go-mid: #2A5238;
+  --go-soft: #E2EDE6;
+  --go-label: #1A5C30;
+  --stop: #7A2018;
+  --stop-soft: #F8EDEB;
+  --stop-border: #DFC4BE;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--soft);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+}
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* HEADER */
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.card-title {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--go);
+}
+.card-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--mute);
+}
+
+/* INPUT PANE */
+.input-pane { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
+
+.hypothesis {
+  font-size: 14px; font-weight: 600; color: var(--go);
+  line-height: 1.45;
+  padding: 12px 14px;
+  background: var(--go-soft);
+  border-left: 3px solid var(--go);
+  border-radius: 0 10px 10px 0;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.chip {
+  font-size: 12px; font-weight: 600; color: var(--soft);
+  background: var(--card); border: 1.5px solid var(--line);
+  border-radius: 999px; padding: 6px 13px; cursor: pointer; line-height: 1.3;
+  transition: border-color 0.12s, color 0.12s;
+}
+.chip:hover, .chip.sel { border-color: var(--go-mid); color: var(--go); }
+
+.build-btn {
+  width: 100%; padding: 14px; border-radius: 12px;
+  background: var(--go); color: #fff;
+  font-size: 14px; font-weight: 800; min-height: 48px;
+}
+.build-btn:hover { background: var(--go-mid); }
+
+.caption {
+  font-size: 11px; color: var(--mute); font-style: italic;
+  padding: 0 2px;
+}
+
+/* OUTPUT PANE */
+.output-pane {
+  display: none; padding: 16px 18px; flex-direction: column; gap: 12px;
+}
+.output-pane.on { display: flex; }
+
+.section { display: flex; flex-direction: column; gap: 4px; }
+.section-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--go-label);
+}
+.section-body { font-size: 12px; color: var(--soft); line-height: 1.55; }
+.section-body strong { color: var(--ink); font-weight: 700; }
+
+.kill-block {
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(122,32,24,0.06);
+  border: 1px solid rgba(122,32,24,0.15);
+}
+.kill-block .section-label { color: var(--stop); }
+.kill-block .section-body { color: var(--stop); font-size: 11px; }
+
+.guardrail {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; color: var(--go-label);
+  padding: 9px 12px; border-radius: 10px;
+  background: var(--go-soft);
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--go-label); flex-shrink: 0; }
+
+.back-row {
+  padding: 0 18px 14px;
+}
+.back-btn {
+  font-size: 12px; font-weight: 700; color: var(--mute);
+  padding: 6px 0; text-decoration: underline; cursor: pointer;
+  background: none; border: none;
+}
+.back-btn:hover { color: var(--ink); }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;card&quot;&gt;
+  &lt;div class=&quot;card-header&quot;&gt;
+    &lt;span class=&quot;card-title&quot;&gt;One Brief · Journey&lt;/span&gt;
+    &lt;span class=&quot;card-badge&quot;&gt;Hypothesis&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;!-- INPUT --&gt;
+  &lt;div class=&quot;input-pane&quot; id=&quot;input-pane&quot;&gt;
+    &lt;div class=&quot;hypothesis&quot;&gt;Customers drop off at Activate because they never see value before their first decision.&lt;/div&gt;
+    &lt;div class=&quot;chips&quot; id=&quot;chips&quot;&gt;
+      &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;Activate score 54&lt;/button&gt;
+      &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;No guided first action&lt;/button&gt;
+      &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;Day-7 churn spike&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;button class=&quot;build-btn&quot; id=&quot;build-btn&quot; type=&quot;button&quot;&gt;Build the brief&lt;/button&gt;
+    &lt;p class=&quot;caption&quot;&gt;Activate score 54 is a fact. The reason is a bet.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;!-- OUTPUT --&gt;
+  &lt;div class=&quot;output-pane&quot; id=&quot;output-pane&quot;&gt;
+    &lt;div class=&quot;section&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;The hypothesis&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-hypothesis&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;section&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;The person&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-person&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;section&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;The next step&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-next&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;kill-block&quot;&gt;
+      &lt;div class=&quot;section-label&quot;&gt;Kill condition&lt;/div&gt;
+      &lt;div class=&quot;section-body&quot; id=&quot;out-kill&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;guardrail&quot;&gt;&lt;span class=&quot;dot&quot;&gt;&lt;/span&gt;Guardrails passed · ready to test&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;back-row&quot; id=&quot;back-row&quot; style=&quot;display:none&quot;&gt;
+    &lt;button class=&quot;back-btn&quot; id=&quot;back-btn&quot; type=&quot;button&quot;&gt;← Start over&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const briefs = {
+  activate: {
+    hypothesis: &#x27;Customers drop off at Activate not because the features are hard, but because they never see value before their first decision point.&#x27;,
+    person: &#x27;New accounts who completed Onboard but never reached a meaningful outcome. Capable, but unconvinced.&#x27;,
+    next: &#x27;Surface one guided first-action prompt at login. Measure Activate score at day 7 and day 14.&#x27;,
+    kill: &#x27;If adding a first-win prompt does not move Activate score by 8 points in three weeks, the barrier is not visibility.&#x27;,
+  },
+  guided: {
+    hypothesis: &#x27;Customers stall after onboarding not because the product is complex, but because they have no clear first action to take.&#x27;,
+    person: &#x27;Signups who completed setup but never initiated a core workflow in their first 14 days.&#x27;,
+    next: &#x27;Add one &quot;here is your first step&quot; prompt immediately after setup. A/B test for two weeks.&#x27;,
+    kill: &#x27;If the prompt does not improve Onboard-to-Activate progression by 10 points in four weeks, clarity is not the problem.&#x27;,
+  },
+  churn: {
+    hypothesis: &#x27;The day-7 churn spike is not about product quality. Customers are leaving before they experience the value we built for.&#x27;,
+    person: &#x27;Accounts who logged in on days 1–3 then went silent. They tried, saw nothing worth returning for, and left quietly.&#x27;,
+    next: &#x27;Trigger a personal check-in for every account with no activity after day 3. Track retention at day 7 and day 30.&#x27;,
+    kill: &#x27;If a day-5 check-in does not change day-7 retention by at least 15 points after 30 accounts, timing is not the lever.&#x27;,
+  },
+};
+
+let selectedKey = &#x27;activate&#x27;;
+const chipMap = [&#x27;activate&#x27;, &#x27;guided&#x27;, &#x27;churn&#x27;];
+
+document.getElementById(&#x27;chips&#x27;).addEventListener(&#x27;click&#x27;, (e) =&gt; {
+  const chip = e.target.closest(&#x27;.chip&#x27;);
+  if (!chip) return;
+  const idx = [...chip.parentElement.children].indexOf(chip);
+  document.querySelectorAll(&#x27;.chip&#x27;).forEach(c =&gt; c.classList.remove(&#x27;sel&#x27;));
+  chip.classList.add(&#x27;sel&#x27;);
+  selectedKey = chipMap[idx] || &#x27;activate&#x27;;
+});
+
+document.getElementById(&#x27;build-btn&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+  const b = briefs[selectedKey];
+  document.getElementById(&#x27;out-hypothesis&#x27;).textContent = b.hypothesis;
+  document.getElementById(&#x27;out-person&#x27;).textContent = b.person;
+  document.getElementById(&#x27;out-next&#x27;).textContent = b.next;
+  document.getElementById(&#x27;out-kill&#x27;).textContent = b.kill;
+  document.getElementById(&#x27;input-pane&#x27;).style.display = &#x27;none&#x27;;
+  document.getElementById(&#x27;output-pane&#x27;).classList.add(&#x27;on&#x27;);
+  document.getElementById(&#x27;back-row&#x27;).style.display = &#x27;block&#x27;;
+});
+
+document.getElementById(&#x27;back-btn&#x27;).addEventListener(&#x27;click&#x27;, () =&gt; {
+  document.getElementById(&#x27;output-pane&#x27;).classList.remove(&#x27;on&#x27;);
+  document.getElementById(&#x27;input-pane&#x27;).style.display = &#x27;&#x27;;
+  document.getElementById(&#x27;back-row&#x27;).style.display = &#x27;none&#x27;;
+  document.querySelectorAll(&#x27;.chip&#x27;).forEach(c =&gt; c.classList.remove(&#x27;sel&#x27;));
+  selectedKey = &#x27;activate&#x27;;
+});
+
+window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
+  if ([&#x27;ArrowDown&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowLeft&#x27;].includes(e.key))
+    parent.postMessage({ type: &#x27;deck-nav&#x27;, key: e.key }, &#x27;*&#x27;);
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" title="One Brief, a tool that can be wrong"></iframe>
+</section>
+
+<section data-title="Toy or Tool" data-default-skip>
+  <div class="tvt-wrap">
+    <span class="tag">Classify it</span>
+    <h2 class="display">Toy or tool.</h2>
+    <div class="tvt" id="tvt" aria-live="polite">
+      <article class="build" data-verdict="toy">
+        <div class="phone">
+          <div class="phone-kicker">Prompt</div>
+          <p class="phone-prompt">Build me a fitness app.</p>
+          <div class="phone-ui" aria-hidden="true">
+            <div class="phone-tile">Hero. Plans. Progress rings.</div>
+            <div class="phone-tile">A feed of workouts nobody asked for.</div>
+            <div class="phone-tile">Looks finished in four minutes.</div>
+          </div>
+        </div>
+        <ul class="checks">
+          <li class="fail"><span class="check-mark" aria-hidden="true">No</span> A question you can be wrong about</li>
+          <li class="fail"><span class="check-mark" aria-hidden="true">No</span> A kill switch</li>
+          <li class="fail"><span class="check-mark" aria-hidden="true">No</span> A decision after someone uses it</li>
+        </ul>
+        <div class="stamp" aria-hidden="true">Toy</div>
+      </article>
+      <article class="build" data-verdict="tool">
+        <div class="phone">
+          <div class="phone-kicker">Hypothesis</div>
+          <p class="phone-prompt">Busy people skip workouts. They think they need an hour and a gym.</p>
+          <div class="phone-ui" aria-hidden="true">
+            <div class="phone-tile">15 min · Low energy · Hotel dumbbells</div>
+            <div class="phone-cta">One session, right now</div>
+            <div class="phone-tile">Kill: if they open it and do not start, the bet is dead.</div>
+          </div>
+        </div>
+        <ul class="checks">
+          <li class="pass"><span class="check-mark" aria-hidden="true">Yes</span> A question you can be wrong about</li>
+          <li class="pass"><span class="check-mark" aria-hidden="true">Yes</span> A kill switch</li>
+          <li class="pass"><span class="check-mark" aria-hidden="true">Yes</span> A decision after someone uses it</li>
+        </ul>
+        <div class="stamp" aria-hidden="true">Tool</div>
+      </article>
+    </div>
+    <button type="button" class="replay" id="replay-classify">Replay the sort</button>
+  </div>
+</section>
+
+<section class="statement" data-title="Faster" data-default-skip>
+  <h2 class="display">Faster. Wrong.</h2>
+  <p class="lead">Speed amplifies the aim you already have.</p>
+</section>
+
+<section class="statement" data-title="Source code" data-default-skip>
+  <span class="tag">The work</span>
+  <h2 class="display">Context is the new source code.</h2>
+  <p class="lead">The person. The constraints. The decision. How you will know.</p>
+</section>
+
+<section class="verbs" data-title="Four verbs" data-default-skip>
+  <span class="tag tag--ghost">A lifecycle for context</span>
+  <div class="verb-row" aria-label="Build, Evaluate, Distribute, Observe">
+    <span>Build</span>
+    <span class="on">Evaluate</span>
+    <span>Distribute</span>
+    <span>Observe</span>
+  </div>
+</section>
+
+<section class="statement ink" data-title="The question" data-default-skip>
+  <span class="tag">Steal this</span>
+  <h2 class="display">Should this exist?</h2>
+  <p class="lead">Ask it before the next prototype, vendor, or agent.</p>
+</section>
+
+<section class="close" data-title="Close" data-default-skip>
+  <h2 class="display">Judgment is the only layer that matters.</h2>
+  <p class="lead">Afternoon masterclass: a need, a one-page PRD, a prototype, then we try to kill it.</p>
+  <p class="hero-meta">
+    Dejan Krstic<br>
+    dejan.krstic@web.de
+  </p>
+</section>
+
+<div class="help-hint">10 min talk → live demo · Arrow keys · K skip · M overview · R replay · ?full=1 all slides</div>
+<button class="skip-badge" id="skip-badge" type="button" title="Click to toggle (K)">Skipped</button>
+<div class="slide-sorter" id="slide-sorter">
+  <div class="sorter-header">
+    <div>
+      <div class="sorter-title">Slides</div>
+      <div class="sorter-subtitle">Click to jump · Hide to skip</div>
+    </div>
+    <button class="sorter-close" type="button" onclick="closeSorter()" title="Close (M / Esc)">✕</button>
+  </div>
+  <div class="sorter-grid" id="sorter-grid"></div>
+</div>
+
+<script>
+const sections = Array.from(document.querySelectorAll('section'));
+const navDotsContainer = document.getElementById('navDots');
+let currentIdx = 0;
+let sorterVisible = false;
+const STORAGE_KEY = 'skip-sections-' + document.title.replace(/[^a-zA-Z0-9]/g, '-').substring(0, 60);
+const FULL = new URLSearchParams(location.search).has('full');
+const defaultSkip = sections
+  .map((s, i) => (s.hasAttribute('data-default-skip') ? i : -1))
+  .filter(i => i >= 0);
+const skippedSections = new Set(FULL ? [] : defaultSkip);
+
+function saveSkips() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...skippedSections]));
+}
+function applySkips() {
+  sections.forEach((sec, i) => {
+    sec.classList.toggle('skipped', skippedSections.has(i));
+  });
+  rebuildDots();
+}
+function rebuildDots() {
+  navDotsContainer.innerHTML = '';
+  sections.forEach((sec, i) => {
+    if (skippedSections.has(i)) return;
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    const title = sec.dataset.title || 'Slide';
+    dot.type = 'button';
+    dot.setAttribute('aria-label', title);
+    dot.innerHTML = `<span class="tooltip">${title}</span>`;
+    dot.dataset.idx = i;
+    dot.onclick = () => goTo(i);
+    navDotsContainer.appendChild(dot);
+  });
+}
+function getActiveSections() {
+  return sections.map((s, i) => i).filter(i => !skippedSections.has(i));
+}
+function updateProgress(idx) {
+  currentIdx = idx;
+  const active = getActiveSections();
+  const posInActive = active.indexOf(idx);
+  const progress = posInActive >= 0 ? (posInActive + 1) / active.length * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+  navDotsContainer.querySelectorAll('.nav-dot').forEach(d => {
+    d.classList.toggle('active', parseInt(d.dataset.idx) === idx);
+  });
+  document.getElementById('skip-badge').classList.toggle('visible', skippedSections.has(idx));
+}
+function toggleSkip(idx) {
+  if (skippedSections.has(idx)) skippedSections.delete(idx);
+  else skippedSections.add(idx);
+  saveSkips(); applySkips(); updateProgress(currentIdx);
+  if (sorterVisible) renderSorter();
+}
+function nextActive(from, dir) {
+  let i = from + dir;
+  while (i >= 0 && i < sections.length) {
+    if (!skippedSections.has(i)) return i;
+    i += dir;
+  }
+  return -1;
+}
+function goTo(n) {
+  if (n < 0) return;
+  sections[n].classList.add('visible');
+  if (sections[n].contains(tvt)) runClassify();
+  sections[n].scrollIntoView({ behavior: 'smooth' });
+}
+const tvt = document.getElementById('tvt');
+function runClassify() {
+  if (!tvt) return;
+  tvt.classList.remove('run');
+  void tvt.offsetWidth;
+  tvt.classList.add('run');
+}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      updateProgress(sections.indexOf(entry.target));
+      if (entry.target.contains(tvt)) runClassify();
+    }
+  });
+}, { threshold: 0.35 });
+sections.forEach(sec => observer.observe(sec));
+document.getElementById('replay-classify').addEventListener('click', runClassify);
+
+function renderSorter() {
+  const grid = document.getElementById('sorter-grid');
+  grid.innerHTML = '';
+  sections.forEach((sec, i) => {
+    const isSkipped = skippedSections.has(i);
+    const div = document.createElement('div');
+    div.className = 'sorter-item' + (isSkipped ? ' sorter-skipped' : '') + (i === currentIdx ? ' sorter-active' : '');
+    const title = sec.dataset.title || 'Slide';
+    div.innerHTML = `
+      <div class="sorter-num">Slide ${i + 1}</div>
+      <div class="sorter-label">${title}</div>
+      <button type="button" class="sorter-skip-btn ${isSkipped ? 'skip-on' : 'skip-off'}"
+              onclick="event.stopPropagation(); toggleSkip(${i})">
+        ${isSkipped ? 'Show' : 'Hide'}
+      </button>`;
+    div.addEventListener('click', () => { goTo(i); closeSorter(); });
+    grid.appendChild(div);
+  });
+}
+function openSorter() {
+  sorterVisible = true;
+  renderSorter();
+  document.getElementById('slide-sorter').classList.add('visible');
+}
+function closeSorter() {
+  sorterVisible = false;
+  document.getElementById('slide-sorter').classList.remove('visible');
+}
+document.getElementById('skip-badge').addEventListener('click', () => toggleSkip(currentIdx));
+document.addEventListener('keydown', (e) => {
+  if (sorterVisible) {
+    if (e.key === 'Escape' || e.key === 'm' || e.key === 'M') { e.preventDefault(); closeSorter(); }
+    return;
+  }
+  const typing = /BUTTON|INPUT|TEXTAREA|SELECT|IFRAME/.test(e.target.tagName);
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || (e.key === ' ' && !typing)) {
+    e.preventDefault();
+    goTo(nextActive(currentIdx, 1));
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault();
+    goTo(nextActive(currentIdx, -1));
+  } else if (e.key === 'k' || e.key === 'K') {
+    toggleSkip(currentIdx);
+  } else if (e.key === 'm' || e.key === 'M') {
+    openSorter();
+  } else if (e.key === 'r' || e.key === 'R') {
+    if (sections[currentIdx] && sections[currentIdx].contains(tvt)) {
+      e.preventDefault();
+      runClassify();
+    }
+  }
+});
+window.addEventListener('message', (e) => {
+  if (!e.data || e.data.type !== 'deck-nav') return;
+  if (e.data.key === 'ArrowDown' || e.data.key === 'ArrowRight') goTo(nextActive(currentIdx, 1));
+  if (e.data.key === 'ArrowUp' || e.data.key === 'ArrowLeft') goTo(nextActive(currentIdx, -1));
+});
+applySkips();
+sections[0].classList.add('visible');
+</script>
+</body>
+</html>
