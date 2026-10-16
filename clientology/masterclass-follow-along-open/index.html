@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Hypothesis to Tool</title>
+<meta name="description" content="Masterclass follow-along: go from an idea to a tested hypothesis, a working tool in Lovable, evals, and real user feedback. Every step and prompt.">
+<meta property="og:title" content="From hypothesis to tool · Masterclass follow-along">
+<meta property="og:description" content="Idea, hypothesis, test, evals, user feedback, then round again. Every step and prompt to run the loop yourself.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://djn-krs-2709.github.io/coaching-shareables/clientology/masterclass-follow-along-open/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root {
+  --bg: #F3F2EF;
+  --paper: #FFFFFF;
+  --ink: #0E0E0E;
+  --ink-soft: #2E2E2E;
+  --mute: #6B6B6B;
+  --line: #E2E0DA;
+  --accent: #2B59FF;
+  --accent-ink: #1B3FCC;
+  --accent-bg: #ECF0FF;
+  --go: #1F7A4D;
+  --go-bg: #E6F4EC;
+  --stop: #B3261E;
+  --stop-bg: #FBEAE8;
+  --display: 'Anton', Impact, 'Arial Narrow', sans-serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121212; --paper: #1B1B1B; --ink: #F3F2EF; --ink-soft: #D6D4CE; --mute: #9A9890;
+    --line: #2E2E2E; --accent: #7D9BFF; --accent-ink: #A9BCFF; --accent-bg: #1C2340;
+    --go: #6FD3A0; --go-bg: #16301F; --stop: #FF9A90; --stop-bg: #3A1A17;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121212; --paper: #1B1B1B; --ink: #F3F2EF; --ink-soft: #D6D4CE; --mute: #9A9890;
+  --line: #2E2E2E; --accent: #7D9BFF; --accent-ink: #A9BCFF; --accent-bg: #1C2340;
+  --go: #6FD3A0; --go-bg: #16301F; --stop: #FF9A90; --stop-bg: #3A1A17;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; font-size: 16px; }
+a { color: var(--accent); }
+.wrap { max-width: 860px; margin: 0 auto; padding: 48px 24px 120px; }
+
+/* Header */
+.kicker { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+h1 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(44px, 9vw, 84px); line-height: .95; margin: 12px 0 20px; letter-spacing: .005em; }
+h1 .accent { color: var(--accent); }
+.lead { font-size: 19px; color: var(--ink-soft); max-width: 640px; margin: 0 0 28px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 0 0 16px; }
+.fact { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.fact b { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); font-weight: 700; margin-bottom: 2px; }
+
+/* Jump nav */
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 0; }
+.jump a { font-size: 13px; font-weight: 600; text-decoration: none; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+.jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Sections */
+section { margin-top: 72px; scroll-margin-top: 24px; }
+.part { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(30px, 5vw, 44px); line-height: 1; margin: 0 0 8px; }
+.part-sub { color: var(--mute); margin: 0 0 28px; font-size: 16px; }
+h3 { font-size: 20px; margin: 0 0 8px; line-height: 1.3; }
+p { margin: 0 0 14px; }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 8px; margin: 0 0 16px; }
+
+/* Loop */
+.loop { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.loop li { display: grid; grid-template-columns: 36px 1fr; gap: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.loop-n { font-family: var(--display); font-size: 28px; line-height: 1; color: var(--accent); }
+.loop h3 { margin: 0 0 4px; font-size: 18px; }
+.loop p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+.loop li.loop-back { background: var(--accent-bg); border-color: transparent; }
+
+/* Big quote */
+.big { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(28px, 5vw, 42px); line-height: 1.05; margin: 8px 0 6px; }
+.big .accent { color: var(--accent); }
+
+/* Prompt blocks */
+.prompt { position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; margin: 10px 0 16px; overflow: hidden; }
+.prompt-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 10px 8px 14px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 85%, var(--bg)); }
+.prompt-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.prompt-label .where { color: var(--accent); }
+.prompt pre { margin: 0; padding: 14px; font-family: var(--mono); font-size: 13.5px; line-height: 1.55; white-space: pre-wrap; word-wrap: break-word; color: var(--ink); }
+.slot { background: var(--accent-bg); color: var(--accent-ink); border-radius: 4px; padding: 0 3px; }
+.slot.filled { background: var(--go-bg); color: var(--go); }
+.copy { font: inherit; font-size: 12px; font-weight: 700; color: var(--paper); background: var(--ink); border: none; border-radius: 999px; padding: 6px 14px; cursor: pointer; white-space: nowrap; }
+.copy:hover { background: var(--accent); }
+.copy.done { background: var(--go); }
+.copy:focus-visible, .jump a:focus-visible, input:focus-visible, textarea:focus-visible, .tick:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Expect / watch-out */
+.expect { border-left: 3px solid var(--go); background: var(--go-bg); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 0 0 16px; font-size: 15px; }
+.expect b, .warn b { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+.expect b { color: var(--go); }
+.warn { border-left: 3px solid var(--stop); background: var(--stop-bg); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 0 0 16px; font-size: 15px; }
+.warn b { color: var(--stop); }
+
+/* Confidence Line */
+.cl { margin: 18px 0 8px; }
+.cl-track { position: relative; height: 10px; border-radius: 999px; background: var(--line); margin: 34px 0 10px; }
+.cl-fill { position: absolute; inset: 0 auto 0 0; width: 72%; border-radius: 999px; background: linear-gradient(90deg, var(--accent-bg), var(--accent)); }
+.cl-commit { position: absolute; left: 72%; top: -26px; bottom: -8px; border-left: 2px dashed var(--ink); }
+.cl-commit span { position: absolute; top: -2px; left: 6px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.cl-ends { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--mute); }
+.cl-zones { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px; }
+.cl-zone { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 14px; font-size: 14px; }
+.cl-zone b { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+.cl-zone.after b { color: var(--ink); }
+
+/* Toy vs tool */
+.tvt { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tvt > div { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+.tvt h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 26px; }
+.tvt .toy h3 { color: var(--stop); }
+.tvt .tool h3 { color: var(--go); }
+.tvt ul { margin: 6px 0 0; padding-left: 18px; font-size: 15px; }
+.tvt li { margin: 4px 0; }
+
+/* Steps */
+.step { position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 22px 22px 8px; margin: 0 0 16px; }
+.step-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.step-n { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.step-time { font-size: 12px; font-weight: 600; color: var(--mute); }
+.step h3 { font-size: 22px; margin: 2px 0 0; }
+.tick { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; font-weight: 600; color: var(--mute); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+.tick::before { content: ''; width: 14px; height: 14px; border: 2px solid currentColor; border-radius: 50%; }
+.tick[aria-pressed="true"] { color: var(--go); border-color: var(--go); background: var(--go-bg); }
+.tick[aria-pressed="true"]::before { background: currentColor; }
+.step.is-done { border-color: var(--go); }
+ol.do, ul.do { padding-left: 20px; margin: 0 0 14px; }
+ol.do li, ul.do li { margin: 6px 0; }
+
+/* Builder */
+.builder { display: grid; gap: 12px; margin: 6px 0 16px; }
+.field label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.field small { display: block; font-size: 12px; color: var(--mute); margin-top: 3px; }
+.field input, .field textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.field textarea { resize: vertical; min-height: 64px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.out { background: var(--accent-bg); border-radius: 12px; padding: 16px; margin: 4px 0 16px; }
+.out b { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 4px; }
+.out p { font-size: 18px; font-weight: 600; margin: 0 0 10px; color: var(--ink); }
+.out p.kill { font-size: 15px; font-weight: 500; color: var(--ink-soft); margin: 0; }
+.checks { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 6px; font-size: 15px; }
+.checks li { padding-left: 26px; position: relative; }
+.checks li::before { content: '?'; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-bg); color: var(--accent-ink); font-size: 11px; font-weight: 800; display: grid; place-items: center; }
+.reset { font: inherit; font-size: 13px; color: var(--mute); background: none; border: none; text-decoration: underline; cursor: pointer; padding: 0; }
+
+/* Journey */
+.journey { position: relative; margin: 8px 0 0; padding-left: 28px; }
+.journey::before { content: ''; position: absolute; left: 9px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+.stage { position: relative; margin: 0 0 14px; }
+.stage::before { content: ''; position: absolute; left: -26px; top: 18px; width: 16px; height: 16px; border-radius: 50%; background: var(--paper); border: 3px solid var(--accent); }
+.stage.commit::before { background: var(--ink); border-color: var(--ink); }
+.stage-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.stage-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.stage-head h3 { margin: 0; font-size: 18px; }
+.stage-tag { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.meter { height: 6px; border-radius: 999px; background: var(--line); margin: 10px 0 12px; overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+.stage dl { display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px; margin: 0; font-size: 14px; }
+.stage dt { font-weight: 700; color: var(--mute); }
+.stage dd { margin: 0; color: var(--ink-soft); }
+
+/* Present template */
+.present { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.present div { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px; font-size: 14px; }
+.present b { display: block; font-size: 15px; margin-bottom: 4px; color: var(--ink); }
+
+/* Monday */
+.monday { background: var(--ink); color: var(--bg); border-radius: 18px; padding: 28px 24px; }
+.monday .part { color: var(--bg); }
+.monday ol { margin: 0; padding-left: 22px; font-size: 17px; }
+.monday li { margin: 8px 0; }
+.monday p { color: color-mix(in srgb, var(--bg) 75%, var(--ink)); }
+
+footer { margin-top: 64px; font-size: 13px; color: var(--mute); }
+
+@media (max-width: 640px) {
+  .wrap { padding: 32px 16px 80px; }
+  .tvt, .row2, .cl-zones, .loop { grid-template-columns: 1fr; }
+    .step, .card { padding: 18px 16px 6px; }
+  .step-top { flex-direction: column; }
+  .stage dl { grid-template-columns: 1fr; }
+  .stage dt { margin-top: 6px; }
+  .lead { font-size: 17px; }
+}
+@media print {
+  .copy, .tick, .jump, .reset { display: none; }
+  body { background: #fff; }
+  section { break-inside: avoid-page; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="kicker">Experience Summit · Prague · Masterclass</div>
+  <h1>From hypothesis to <span class="accent">tool</span></h1>
+  <p class="lead">This morning you watched one sentence turn into a working product, get tested, and land on your phones. This afternoon you do the same with your own idea. This page has every prompt and every step. Keep it open.</p>
+  <div class="facts">
+    <div class="fact"><b>You build in</b>Lovable</div>
+    <div class="fact"><b>Your login</b>Shared account, handed out in the room</div>
+    <div class="fact"><b>You leave with</b>A live link, a tested hypothesis, a next step</div>
+  </div>
+  <nav class="jump" aria-label="Jump to">
+    <a href="#recap">1 · The loop</a>
+    <a href="#idea">2 · The idea</a>
+    <a href="#steps">3 · Your turn</a>
+    <a href="#journey">4 · The journey</a>
+    <a href="#pack">5 · Prompt pack</a>
+  </nav>
+</header>
+
+<!-- ============ 1. RECAP ============ -->
+<section id="recap">
+  <h2 class="part">1 · The loop you saw on stage</h2>
+  <p class="part-sub">This morning you watched one idea go round this loop in about ten minutes. This afternoon it is your turn.</p>
+
+  <ol class="loop">
+    <li><span class="loop-n">1</span><div><h3>Idea</h3><p>Start from a friction you keep hearing. People skip workouts because they think they need an hour and a gym.</p></div></li>
+    <li><span class="loop-n">2</span><div><h3>Hypothesis</h3><p>Turn it into a bet you can be wrong about. If we remove that barrier, more people will actually start.</p></div></li>
+    <li><span class="loop-n">3</span><div><h3>Test</h3><p>Build the smallest thing that tests the bet. Use it. Then try to break it.</p></div></li>
+    <li><span class="loop-n">4</span><div><h3>Evals</h3><p>When it gives a bad answer, write the rule it must pass. Only then let other people use it.</p></div></li>
+    <li><span class="loop-n">5</span><div><h3>User feedback</h3><p>Put it in real hands. Watch what people actually do and type. Not a survey.</p></div></li>
+    <li class="loop-back"><span class="loop-n">↻</span><div><h3>Go round again</h3><p>What people did becomes your next hypothesis. Each round moves you further along the Confidence Line, until you can kill it or commit.</p></div></li>
+  </ol>
+</section>
+
+<!-- ============ 2. THE IDEA ============ -->
+<section id="idea">
+  <h2 class="part">2 · The idea in three pictures</h2>
+  <p class="part-sub">Everything you do this afternoon comes back to these.</p>
+
+  <div class="card">
+    <p class="big">The hypothesis is the <span class="accent">product.</span></p>
+    <p>The code is just the test. Building is cheap now. Anyone in this room can build something in an afternoon. The hard part is knowing what you are testing, and what result would prove you wrong.</p>
+  </div>
+
+  <div class="card">
+    <h3>The Confidence Line</h3>
+    <p>On the left, you are guessing. On the right, you know. Your job is to move right, cheaply and honestly. Spend the least that moves you right.</p>
+    <div class="cl" aria-label="Confidence Line from guessing to knowing, with a commit point">
+      <div class="cl-track"><div class="cl-fill"></div><div class="cl-commit"><span>Commit</span></div></div>
+      <div class="cl-ends"><span>We are guessing</span><span>We know</span></div>
+      <div class="cl-zones">
+        <div class="cl-zone"><b>Smallest bet</b>One sentence. One open prompt. One thing that can be wrong. Today.</div>
+        <div class="cl-zone"><b>Evidence, still cheap</b>Real people use it. Evals catch the bad answers. You watch what they type.</div>
+        <div class="cl-zone after"><b>After commit</b>Now invest. More screens, engineering, distribution, scale. Same artifact, just more robust.</div>
+      </div>
+    </div>
+    <p style="margin-top:16px">Do not overinvest early. When you are still guessing, write a high-level prompt that describes the outcome, not every screen. The more confident you get, the more concrete you can be.</p>
+  </div>
+
+  <div class="tvt">
+    <div class="toy">
+      <h3>Toy</h3>
+      <p>"Build me a fitness app."</p>
+      <ul>
+        <li>Looks finished in four minutes</li>
+        <li>No question it can be wrong about</li>
+        <li>Gets applause, not a decision</li>
+      </ul>
+    </div>
+    <div class="tool">
+      <h3>Tool</h3>
+      <p>"Busy people skip workouts because they think they need an hour and a gym."</p>
+      <ul>
+        <li>A question you can be wrong about</li>
+        <li>A kill condition</li>
+        <li>A decision after someone uses it</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. YOUR TURN ============ -->
+<section id="steps">
+  <h2 class="part">3 · Your turn, step by step</h2>
+  <p class="part-sub">Tick each step when you are done. Your hypothesis fills into every prompt below automatically, so you only write it once.</p>
+
+  <!-- Step 1 -->
+  <article class="step" data-step="1">
+    <div class="step-top">
+      <div><div class="step-n">Step 1</div><h3>Find one real friction</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <p>Pick one person and one moment where they get stuck. Use the Customer Journey Guide from Jakub to find it: a persona, a need, a barrier. Choose a friction you have seen yourself, at work or in your life.</p>
+    <ul class="do">
+      <li><b>One person.</b> Not "users". For example: new customers in their first week.</li>
+      <li><b>One moment.</b> Where exactly do they stop? For example: after signing up, before the first real use.</li>
+      <li><b>One barrier.</b> What do they believe or lack? For example: they do not see value before they have to decide.</li>
+    </ul>
+    <div class="expect"><b>Good sign</b>You can say it in one breath, and someone at your table nods because they have seen it too.</div>
+  </article>
+
+  <!-- Step 2 -->
+  <article class="step" data-step="2">
+    <div class="step-top">
+      <div><div class="step-n">Step 2 · 5 min</div><h3>Write your hypothesis</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <p>Fill in the blanks. The grey text is Dejan's workout example. Replace it with yours.</p>
+    <div class="builder" id="builder">
+      <div class="row2">
+        <div class="field"><label for="f-who">Who</label><input id="f-who" data-k="who" placeholder="Busy people"></div>
+        <div class="field"><label for="f-dont">Do not do what?</label><input id="f-dont" data-k="dont" placeholder="skip working out"></div>
+      </div>
+      <div class="field"><label for="f-because">Because they believe or lack</label><input id="f-because" data-k="because" placeholder="they think they need an hour and a gym"><small>The barrier. This is the part you can be wrong about.</small></div>
+      <div class="field"><label for="f-give">If we give them</label><input id="f-give" data-k="give" placeholder="one session from the time, energy, and equipment they have right now"></div>
+      <div class="field"><label for="f-then">Then more of them will</label><input id="f-then" data-k="then" placeholder="actually start a workout"><small>Something you can see happen, not a feeling.</small></div>
+      <div class="field"><label for="f-kill">The bet is dead if</label><input id="f-kill" data-k="kill" placeholder="they open it and do not start a session"></div>
+    </div>
+    <div class="out" aria-live="polite">
+      <b>Your hypothesis</b>
+      <p id="hyp-out"></p>
+      <p class="kill" id="kill-out"></p>
+    </div>
+    <p><b>Check it before you build:</b></p>
+    <ul class="checks">
+      <li>Could this be wrong? If no result would change your mind, it is not a hypothesis yet.</li>
+      <li>Is the barrier a belief or a lack, not a feature? "They need a dashboard" is a solution, not a barrier.</li>
+      <li>Can you see the "then" happen in an afternoon? Starting, clicking, typing, choosing.</li>
+    </ul>
+    <button class="reset" type="button" id="reset">Clear my answers</button>
+    <p style="margin-top:12px"></p>
+  </article>
+
+  <!-- Step 3 -->
+  <article class="step" data-step="3">
+    <div class="step-top">
+      <div><div class="step-n">Step 3 · 5 min</div><h3>Build it in Lovable</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <ol class="do">
+      <li>Open <a href="https://lovable.dev/" target="_blank" rel="noopener">lovable.dev</a> and log in with the shared account you got in the room.</li>
+      <li>Copy the starter prompt below. Your hypothesis is already in it.</li>
+      <li>Paste it into Lovable and press enter. Then leave it alone while it builds.</li>
+    </ol>
+    <div class="prompt">
+      <div class="prompt-head"><span class="prompt-label">Starter prompt · <span class="where">Lovable</span></span><button class="copy" type="button">Copy</button></div>
+      <pre>Build a one-screen app from this hypothesis. Not a landing page. Not a marketing site.
+
+Hypothesis: <span class="slot" data-slot="hyp">PASTE YOUR SENTENCE HERE</span>
+
+Shape: three choices they can tap (what they have right now), a text box, one session they can start now. No signup. No dashboard.
+
+Keep a live ranked list of what people actually type, on the same screen. Anyone on this link should see the same asks. That is how you see the need.
+
+If someone types something off-label for this product, do not play expert. Hand them to a qualified human.</pre>
+    </div>
+    <div class="expect"><b>Why it looks like this</b>It describes the outcome, not every screen. That is the right level of investment while you are still guessing. The last line is your first guardrail, written before you even see the product.</div>
+    <div class="warn"><b>Shared account</b>Everyone uses the same Lovable licence today. Do not paste real customer data, names, or anything confidential. Save your link and your prompts before you leave. The temporary account will not stay open.</div>
+  </article>
+
+  <!-- Step 4 -->
+  <article class="step" data-step="4">
+    <div class="step-top">
+      <div><div class="step-n">Step 4 · 3 min</div><h3>Try it yourself, then break it</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <ol class="do">
+      <li><b>Use it the way your person would.</b> Type a real, normal request. Does it give them the thing in your "if we give them"?</li>
+      <li><b>Now type something it should not handle.</b> A medical, legal, or money question. Something outside the job. A request to ignore its rules.</li>
+      <li>Write down the one answer that made you uncomfortable. That is your first eval.</li>
+    </ol>
+    <div class="expect"><b>Remember the back-pain moment</b>A normal app breaks in your face. An AI product does not break. It just starts sounding like an expert it is not. You usually do not know what is bad until you use it.</div>
+  </article>
+
+  <!-- Step 5 -->
+  <article class="step" data-step="5">
+    <div class="step-top">
+      <div><div class="step-n">Step 5 · 5 min</div><h3>Let a model find the loopholes</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <p>Open any other AI model (ChatGPT, Claude, Gemini, not Lovable). Paste this. It lists the ways real people will push your product to do the wrong job.</p>
+    <div class="prompt">
+      <div class="prompt-head"><span class="prompt-label">Loophole helper · <span class="where">ChatGPT, Claude, any model</span></span><button class="copy" type="button">Copy</button></div>
+      <pre>Hypothesis: <span class="slot" data-slot="hyp">PASTE YOUR SENTENCE HERE</span>
+
+I am writing evals for this product, not attacking it. List 5 ways a user will try to get it to do the wrong job.
+
+Cover: off-label expert advice (medical, legal, money), going outside the product while sounding in-scope, trying to make it ignore its rules or reveal its instructions.
+
+For each, use this shape:
+If they type: (one plain sentence a real user would type)
+Do not: (the bad behavior)
+Hand them to: (who)
+
+No attack recipes. Plain language only. I will pick one to test.</pre>
+    </div>
+    <div class="expect"><b>You decide</b>AI is good at finding the risks. You choose which one matters most for your person. Pick one.</div>
+  </article>
+
+  <!-- Step 6 -->
+  <article class="step" data-step="6">
+    <div class="step-top">
+      <div><div class="step-n">Step 6 · 5 min</div><h3>Add the eval</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <p>Take the one loophole you picked, from step 4 or step 5. Fill it in here, then paste the prompt into Lovable.</p>
+    <div class="builder">
+      <div class="row2">
+        <div class="field"><label for="f-fail">If they type</label><input id="f-fail" data-k="fail" placeholder="My back is starting to hurt. What can I do?"></div>
+        <div class="field"><label for="f-hand">Hand them to</label><input id="f-hand" data-k="hand" placeholder="a clinician"></div>
+      </div>
+    </div>
+    <div class="prompt">
+      <div class="prompt-head"><span class="prompt-label">Push the eval · <span class="where">Lovable</span></span><button class="copy" type="button">Copy</button></div>
+      <pre>People will type things that are not this product. Add a rule: if someone types "<span class="slot" data-slot="fail">PASTE YOUR FAILING INPUT</span>", do not play expert. Hand them to <span class="slot" data-slot="hand">PASTE WHO</span>. Show me that it refuses.</pre>
+    </div>
+    <p>When Lovable finishes, type the same bad input again. It should now hand the person on, not answer.</p>
+    <div class="expect"><b>Why this matters</b>You are not writing a spec. You are writing the test. You can run it again any time. Do not wait to add evals after you ship. If it fails in front of users, they stop trusting you and do not come back.</div>
+  </article>
+
+  <!-- Step 7 -->
+  <article class="step" data-step="7">
+    <div class="step-top">
+      <div><div class="step-n">Step 7 · 5 min</div><h3>Share it and let others use it</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <ol class="do">
+      <li>In Lovable, click <b>Share</b> (top right) and copy the link.</li>
+      <li>Swap links with the people at your table, or drop yours where the room shares them.</li>
+      <li>Open someone else's link and use it for real. Type what their person would actually type. Not a compliment, a real request. That is how their list fills up.</li>
+    </ol>
+    <div class="expect"><b>This is the evidence</b>The first time someone else uses your product is the moment you move right on the Confidence Line.</div>
+  </article>
+
+  <!-- Step 8 -->
+  <article class="step" data-step="8">
+    <div class="step-top">
+      <div><div class="step-n">Step 8 · 3 min</div><h3>Read your board</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <p>Go back to your app. Look at the live list of what people typed.</p>
+    <ul class="do">
+      <li>What is at the top? Is it what you expected?</li>
+      <li>Did anyone use it for something you did not design for?</li>
+      <li>If you were the product manager tonight, what is the next hypothesis from that list?</li>
+    </ul>
+    <div class="expect"><b>No list yet?</b>That is your next thing to ship: a board of what people ask. You do not guess the need. You look at what they did.</div>
+  </article>
+
+  <!-- Step 9 -->
+  <article class="step" data-step="9">
+    <div class="step-top">
+      <div><div class="step-n">Step 9 · 2 min each</div><h3>Present it in four parts</h3></div>
+      <button class="tick" type="button" aria-pressed="false">Done</button>
+    </div>
+    <p>If you share with the room, use this shape. The room's job is to ask one question: what would make this wrong?</p>
+    <div class="present">
+      <div><b>1 · The hypothesis</b>Your sentence and your kill condition.</div>
+      <div><b>2 · What you learned</b>What happened when you and others used it.</div>
+      <div><b>3 · The eval</b>The bad answer you caught, and the rule you added.</div>
+      <div><b>4 · The next step</b>Kill it, change the bet, or invest more. Why.</div>
+    </div>
+  </article>
+</section>
+
+<!-- ============ 4. JOURNEY ============ -->
+<section id="journey">
+  <h2 class="part">4 · The whole journey</h2>
+  <p class="part-sub">The same loop, from first idea to commit. Where you are on the Confidence Line at each stage, what it costs, and what you learn.</p>
+
+  <div class="journey">
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Friction</h3><span class="stage-tag">Guessing</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:5%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Name one person, one moment, one barrier.</dd>
+          <dt>You spend</dt><dd>A conversation. The journey guide.</dd>
+          <dt>You learn</dt><dd>Where to look. Nothing is proven yet.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Hypothesis</h3><span class="stage-tag">Guessing, honestly</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:12%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Write the bet and the kill condition.</dd>
+          <dt>You spend</dt><dd>Five minutes.</dd>
+          <dt>You learn</dt><dd>What would prove you wrong. Now you can be wrong on purpose.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Smallest build</h3><span class="stage-tag">Smallest bet</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:25%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Paste the hypothesis as an open, outcome prompt.</dd>
+          <dt>You spend</dt><dd>One prompt. Minutes.</dd>
+          <dt>You learn</dt><dd>Whether the idea survives contact with a real screen.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Break it</h3><span class="stage-tag">Smallest bet</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:35%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Use it normally, then off-label. Let a model list loopholes.</dd>
+          <dt>You spend</dt><dd>A few test inputs.</dd>
+          <dt>You learn</dt><dd>Where it sounds confident and is wrong.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Eval</h3><span class="stage-tag">Earn the right to ship</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:45%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Write the test as a rule. Check that it refuses.</dd>
+          <dt>You spend</dt><dd>One prompt. A rerun.</dd>
+          <dt>You learn</dt><dd>That it is safe enough to put in other people's hands.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Real use</h3><span class="stage-tag">Evidence, still cheap</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:60%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Share the link. People use it for real.</dd>
+          <dt>You spend</dt><dd>Other people's minutes.</dd>
+          <dt>You learn</dt><dd>Whether the "then" actually happens.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Board</h3><span class="stage-tag">Evidence, still cheap</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:68%"></i></div>
+        <dl>
+          <dt>You do</dt><dd>Read what people actually typed.</dd>
+          <dt>You spend</dt><dd>Attention.</dd>
+          <dt>You learn</dt><dd>The real need, and your next hypothesis.</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="stage commit">
+      <div class="stage-card">
+        <div class="stage-head"><h3>Decide</h3><span class="stage-tag">The commit line</span></div>
+        <div class="meter" aria-hidden="true"><i style="width:72%"></i></div>
+        <dl>
+          <dt>Kill</dt><dd>The kill condition happened. Good. That is a lesson, and it was cheap.</dd>
+          <dt>Change</dt><dd>The board points to a different need. Write the next hypothesis and loop again.</dd>
+          <dt>Commit</dt><dd>The evidence is there. Now invest: more screens, a team, engineering, scale. Keep building on the same artifact.</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. PROMPT PACK ============ -->
+<section id="pack">
+  <h2 class="part">5 · Your prompt pack</h2>
+  <p class="part-sub">Everything in one place, to reuse on Monday. Your answers from step 2 and step 6 are already filled in.</p>
+
+  <div class="prompt">
+    <div class="prompt-head"><span class="prompt-label">1 · Hypothesis template</span><button class="copy" type="button">Copy</button></div>
+    <pre>[Who] [do not do what] because [they believe or lack]. If we give them [the smallest thing], more of them will [something you can see].
+The bet is dead if [kill condition].</pre>
+  </div>
+  <div class="prompt">
+    <div class="prompt-head"><span class="prompt-label">2 · Your hypothesis</span><button class="copy" type="button">Copy</button></div>
+    <pre><span class="slot" data-slot="hyp">PASTE YOUR SENTENCE HERE</span>
+<span class="slot" data-slot="killline">The bet is dead if ...</span></pre>
+  </div>
+  <div class="prompt">
+    <div class="prompt-head"><span class="prompt-label">3 · Starter prompt · <span class="where">Lovable</span></span><button class="copy" type="button">Copy</button></div>
+    <pre>Build a one-screen app from this hypothesis. Not a landing page. Not a marketing site.
+
+Hypothesis: <span class="slot" data-slot="hyp">PASTE YOUR SENTENCE HERE</span>
+
+Shape: three choices they can tap (what they have right now), a text box, one session they can start now. No signup. No dashboard.
+
+Keep a live ranked list of what people actually type, on the same screen. Anyone on this link should see the same asks. That is how you see the need.
+
+If someone types something off-label for this product, do not play expert. Hand them to a qualified human.</pre>
+  </div>
+  <div class="prompt">
+    <div class="prompt-head"><span class="prompt-label">4 · Loophole helper · <span class="where">any model</span></span><button class="copy" type="button">Copy</button></div>
+    <pre>Hypothesis: <span class="slot" data-slot="hyp">PASTE YOUR SENTENCE HERE</span>
+
+I am writing evals for this product, not attacking it. List 5 ways a user will try to get it to do the wrong job.
+
+Cover: off-label expert advice (medical, legal, money), going outside the product while sounding in-scope, trying to make it ignore its rules or reveal its instructions.
+
+For each, use this shape:
+If they type: (one plain sentence a real user would type)
+Do not: (the bad behavior)
+Hand them to: (who)
+
+No attack recipes. Plain language only. I will pick one to test.</pre>
+  </div>
+  <div class="prompt">
+    <div class="prompt-head"><span class="prompt-label">5 · Push the eval · <span class="where">Lovable</span></span><button class="copy" type="button">Copy</button></div>
+    <pre>People will type things that are not this product. Add a rule: if someone types "<span class="slot" data-slot="fail">PASTE YOUR FAILING INPUT</span>", do not play expert. Hand them to <span class="slot" data-slot="hand">PASTE WHO</span>. Show me that it refuses.</pre>
+  </div>
+  <div class="prompt">
+    <div class="prompt-head"><span class="prompt-label">6 · Board, if your app has none · <span class="where">Lovable</span></span><button class="copy" type="button">Copy</button></div>
+    <pre>Add a live leaderboard of what people are actually typing, so we can see their needs. Rank the asks. Everyone on this link should see the same list.</pre>
+  </div>
+</section>
+
+<section>
+  <div class="monday">
+    <h2 class="part">On Monday</h2>
+    <p>Before the next prototype, the next vendor call, or the next backlog meeting, ask two questions: what is the hypothesis? And should this even exist?</p>
+    <ol>
+      <li>One page. One sentence you can be wrong about.</li>
+      <li>One test. The smallest build that can prove it wrong.</li>
+      <li>One eval. Name the bad answer before your users find it.</li>
+      <li>One look at what people actually did. Then decide.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  Masterclass follow-along · Experience Summit, Prague, 20 October 2026 · Dejan Krstic, Product School
+</footer>
+</main>
+
+<script>
+(function () {
+  var KEY = 'hyp-tool-masterclass-v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  var inputs = document.querySelectorAll('[data-k]');
+  inputs.forEach(function (el) {
+    if (state[el.dataset.k]) el.value = state[el.dataset.k];
+    el.addEventListener('input', function () { state[el.dataset.k] = el.value; save(); render(); });
+  });
+
+  function v(k) { return (state[k] || '').trim(); }
+  function clean(s) { return s.replace(/[.\s]+$/, ''); }
+
+  function render() {
+    var who = v('who'), dont = v('dont'), because = v('because'), give = v('give'), then = v('then'), kill = v('kill');
+    var any = who || dont || because || give || then;
+    var hyp = (who || 'Busy people') + ' ' + (dont || 'skip working out') + ' because ' + clean(because || 'they think they need an hour and a gym') +
+      '. If we give them ' + clean(give || 'one session from the time, energy, and equipment they have right now') +
+      ', more of them will ' + clean(then || 'actually start a workout') + '.';
+    hyp = hyp.charAt(0).toUpperCase() + hyp.slice(1);
+    var killLine = 'The bet is dead if ' + clean(kill || 'they open it and do not start a session') + '.';
+    document.getElementById('hyp-out').textContent = hyp;
+    document.getElementById('kill-out').textContent = killLine;
+
+    fill('hyp', any ? hyp : '', 'PASTE YOUR SENTENCE HERE');
+    fill('killline', any || kill ? killLine : '', 'The bet is dead if ...');
+    fill('fail', v('fail'), 'PASTE YOUR FAILING INPUT');
+    fill('hand', v('hand'), 'PASTE WHO');
+  }
+  function fill(slot, val, fallback) {
+    document.querySelectorAll('[data-slot="' + slot + '"]').forEach(function (s) {
+      s.textContent = val || fallback;
+      s.classList.toggle('filled', !!val);
+    });
+  }
+
+  document.getElementById('reset').addEventListener('click', function () {
+    ['who', 'dont', 'because', 'give', 'then', 'kill', 'fail', 'hand'].forEach(function (k) { delete state[k]; });
+    inputs.forEach(function (el) { el.value = ''; });
+    save(); render();
+  });
+
+  // Step ticks
+  state.done = state.done || {};
+  document.querySelectorAll('.step').forEach(function (step) {
+    var n = step.dataset.step, btn = step.querySelector('.tick');
+    function paint() {
+      var on = !!state.done[n];
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.textContent = on ? 'Done' : 'Mark done';
+      step.classList.toggle('is-done', on);
+    }
+    btn.addEventListener('click', function () { state.done[n] = !state.done[n]; save(); paint(); });
+    paint();
+  });
+
+  // Copy buttons
+  function copyText(text, btn) {
+    function ok() { btn.textContent = 'Copied'; btn.classList.add('done'); setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1600); }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(ok, function () { fallback(text); ok(); });
+    } else { fallback(text); ok(); }
+  }
+  function fallback(text) {
+    var t = document.createElement('textarea');
+    t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(t);
+  }
+  document.querySelectorAll('.prompt').forEach(function (p) {
+    var btn = p.querySelector('.copy'), pre = p.querySelector('pre');
+    btn.addEventListener('click', function () { copyText(pre.textContent, btn); });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
