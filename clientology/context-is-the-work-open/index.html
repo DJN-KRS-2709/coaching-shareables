@@ -946,6 +946,18 @@ document.getElementById(&#x27;cta&#x27;).addEventListener(&#x27;click&#x27;, () 
 document.querySelectorAll(&#x27;.stage&#x27;).forEach(s =&gt;
   s.addEventListener(&#x27;click&#x27;, () =&gt; say(&#x27;Stage selected. Nothing to test.&#x27;))
 );
+
+// Scale the dashboard up a little for the stage, capped so it stays a phone-like costume.
+function fitCard() {
+  const card = document.querySelector(&#x27;.card&#x27;);
+  card.style.zoom = 1;
+  const z = Math.max(1, Math.min((innerHeight - 48) / card.offsetHeight, (innerWidth * 0.8) / card.offsetWidth, 1.4));
+  card.style.zoom = z.toFixed(3);
+}
+window.addEventListener(&#x27;resize&#x27;, fitCard);
+if (document.fonts &amp;&amp; document.fonts.ready) document.fonts.ready.then(fitCard);
+fitCard();
+
 window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
   if ([&#x27;ArrowDown&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowLeft&#x27;].includes(e.key))
     parent.postMessage({ type: &#x27;deck-nav&#x27;, key: e.key }, &#x27;*&#x27;);
@@ -999,7 +1011,7 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 
 .card {
   width: 100%;
-  max-width: 400px;
+  max-width: 520px;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -1013,11 +1025,11 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
   border-bottom: 1px solid var(--line);
 }
 .card-title {
-  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  font-size: 13px; font-weight: 800; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--go);
 }
 .card-badge {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--mute);
 }
 
@@ -1025,7 +1037,7 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 .input-pane { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
 
 .hypothesis {
-  font-size: 14px; font-weight: 600; color: var(--go);
+  font-size: 18px; font-weight: 600; color: var(--go);
   line-height: 1.45;
   padding: 12px 14px;
   background: var(--go-soft);
@@ -1035,7 +1047,7 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .chip {
-  font-size: 12px; font-weight: 600; color: var(--soft);
+  font-size: 14px; font-weight: 600; color: var(--soft);
   background: var(--card); border: 1.5px solid var(--line);
   border-radius: 999px; padding: 6px 13px; cursor: pointer; line-height: 1.3;
   transition: border-color 0.12s, color 0.12s;
@@ -1045,12 +1057,12 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 .build-btn {
   width: 100%; padding: 14px; border-radius: 12px;
   background: var(--go); color: #fff;
-  font-size: 14px; font-weight: 800; min-height: 48px;
+  font-size: 16px; font-weight: 800; min-height: 52px;
 }
 .build-btn:hover { background: var(--go-mid); }
 
 .caption {
-  font-size: 11px; color: var(--mute); font-style: italic;
+  font-size: 13px; color: var(--mute); font-style: italic;
   padding: 0 2px;
 }
 
@@ -1062,10 +1074,10 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 
 .section { display: flex; flex-direction: column; gap: 4px; }
 .section-label {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--go-label);
 }
-.section-body { font-size: 12px; color: var(--soft); line-height: 1.55; }
+.section-body { font-size: 15px; color: var(--soft); line-height: 1.55; }
 .section-body strong { color: var(--ink); font-weight: 700; }
 
 .kill-block {
@@ -1074,11 +1086,11 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
   border: 1px solid rgba(122,32,24,0.15);
 }
 .kill-block .section-label { color: var(--stop); }
-.kill-block .section-body { color: var(--stop); font-size: 11px; }
+.kill-block .section-body { color: var(--stop); font-size: 14px; }
 
 .guardrail {
   display: flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 700; color: var(--go-label);
+  font-size: 13px; font-weight: 700; color: var(--go-label);
   padding: 9px 12px; border-radius: 10px;
   background: var(--go-soft);
 }
@@ -1191,6 +1203,36 @@ document.getElementById(&#x27;back-btn&#x27;).addEventListener(&#x27;click&#x27;
   document.querySelectorAll(&#x27;.chip&#x27;).forEach(c =&gt; c.classList.remove(&#x27;sel&#x27;));
   selectedKey = &#x27;activate&#x27;;
 });
+
+
+// Scale the card to fill the slide. Sized for the taller output state so it does not jump between states.
+function fitCard() {
+  const card = document.querySelector(&#x27;.card&#x27;);
+  const inPane = document.getElementById(&#x27;input-pane&#x27;);
+  const outPane = document.getElementById(&#x27;output-pane&#x27;);
+  const backRow = document.getElementById(&#x27;back-row&#x27;);
+  const wasOut = outPane.classList.contains(&#x27;on&#x27;);
+  const saved = [&#x27;out-hypothesis&#x27;, &#x27;out-person&#x27;, &#x27;out-next&#x27;, &#x27;out-kill&#x27;].map(id =&gt; document.getElementById(id).textContent);
+  card.style.zoom = 1;
+  if (!wasOut) {
+    const b = briefs.churn;
+    document.getElementById(&#x27;out-hypothesis&#x27;).textContent = b.hypothesis;
+    document.getElementById(&#x27;out-person&#x27;).textContent = b.person;
+    document.getElementById(&#x27;out-next&#x27;).textContent = b.next;
+    document.getElementById(&#x27;out-kill&#x27;).textContent = b.kill;
+    inPane.style.display = &#x27;none&#x27;; outPane.classList.add(&#x27;on&#x27;); backRow.style.display = &#x27;block&#x27;;
+  }
+  const h = card.offsetHeight, w = card.offsetWidth;
+  if (!wasOut) {
+    [&#x27;out-hypothesis&#x27;, &#x27;out-person&#x27;, &#x27;out-next&#x27;, &#x27;out-kill&#x27;].forEach((id, i) =&gt; document.getElementById(id).textContent = saved[i]);
+    inPane.style.display = &#x27;&#x27;; outPane.classList.remove(&#x27;on&#x27;); backRow.style.display = &#x27;none&#x27;;
+  }
+  const z = Math.max(1, Math.min((innerHeight - 56) / h, (innerWidth * 0.86) / w, 2.6));
+  card.style.zoom = z.toFixed(3);
+}
+window.addEventListener(&#x27;resize&#x27;, fitCard);
+if (document.fonts &amp;&amp; document.fonts.ready) document.fonts.ready.then(fitCard);
+fitCard();
 
 window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
   if ([&#x27;ArrowDown&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowLeft&#x27;].includes(e.key))
@@ -1285,7 +1327,7 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 
 .card {
   width: 100%;
-  max-width: 400px;
+  max-width: 520px;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -1299,11 +1341,11 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
   border-bottom: 1px solid var(--line);
 }
 .card-title {
-  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  font-size: 13px; font-weight: 800; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--go);
 }
 .card-badge {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--mute);
 }
 
@@ -1311,7 +1353,7 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 .input-pane { padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; }
 
 .hypothesis {
-  font-size: 14px; font-weight: 600; color: var(--go);
+  font-size: 18px; font-weight: 600; color: var(--go);
   line-height: 1.45;
   padding: 12px 14px;
   background: var(--go-soft);
@@ -1321,7 +1363,7 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .chip {
-  font-size: 12px; font-weight: 600; color: var(--soft);
+  font-size: 14px; font-weight: 600; color: var(--soft);
   background: var(--card); border: 1.5px solid var(--line);
   border-radius: 999px; padding: 6px 13px; cursor: pointer; line-height: 1.3;
   transition: border-color 0.12s, color 0.12s;
@@ -1331,12 +1373,12 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 .build-btn {
   width: 100%; padding: 14px; border-radius: 12px;
   background: var(--go); color: #fff;
-  font-size: 14px; font-weight: 800; min-height: 48px;
+  font-size: 16px; font-weight: 800; min-height: 52px;
 }
 .build-btn:hover { background: var(--go-mid); }
 
 .caption {
-  font-size: 11px; color: var(--mute); font-style: italic;
+  font-size: 13px; color: var(--mute); font-style: italic;
   padding: 0 2px;
 }
 
@@ -1348,10 +1390,10 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
 
 .section { display: flex; flex-direction: column; gap: 4px; }
 .section-label {
-  font-size: 9px; font-weight: 800; letter-spacing: 0.12em;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--go-label);
 }
-.section-body { font-size: 12px; color: var(--soft); line-height: 1.55; }
+.section-body { font-size: 15px; color: var(--soft); line-height: 1.55; }
 .section-body strong { color: var(--ink); font-weight: 700; }
 
 .kill-block {
@@ -1360,11 +1402,11 @@ button:focus-visible { outline: 2px solid var(--go-mid); outline-offset: 2px; }
   border: 1px solid rgba(122,32,24,0.15);
 }
 .kill-block .section-label { color: var(--stop); }
-.kill-block .section-body { color: var(--stop); font-size: 11px; }
+.kill-block .section-body { color: var(--stop); font-size: 14px; }
 
 .guardrail {
   display: flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 700; color: var(--go-label);
+  font-size: 13px; font-weight: 700; color: var(--go-label);
   padding: 9px 12px; border-radius: 10px;
   background: var(--go-soft);
 }
@@ -1477,6 +1519,36 @@ document.getElementById(&#x27;back-btn&#x27;).addEventListener(&#x27;click&#x27;
   document.querySelectorAll(&#x27;.chip&#x27;).forEach(c =&gt; c.classList.remove(&#x27;sel&#x27;));
   selectedKey = &#x27;activate&#x27;;
 });
+
+
+// Scale the card to fill the slide. Sized for the taller output state so it does not jump between states.
+function fitCard() {
+  const card = document.querySelector(&#x27;.card&#x27;);
+  const inPane = document.getElementById(&#x27;input-pane&#x27;);
+  const outPane = document.getElementById(&#x27;output-pane&#x27;);
+  const backRow = document.getElementById(&#x27;back-row&#x27;);
+  const wasOut = outPane.classList.contains(&#x27;on&#x27;);
+  const saved = [&#x27;out-hypothesis&#x27;, &#x27;out-person&#x27;, &#x27;out-next&#x27;, &#x27;out-kill&#x27;].map(id =&gt; document.getElementById(id).textContent);
+  card.style.zoom = 1;
+  if (!wasOut) {
+    const b = briefs.churn;
+    document.getElementById(&#x27;out-hypothesis&#x27;).textContent = b.hypothesis;
+    document.getElementById(&#x27;out-person&#x27;).textContent = b.person;
+    document.getElementById(&#x27;out-next&#x27;).textContent = b.next;
+    document.getElementById(&#x27;out-kill&#x27;).textContent = b.kill;
+    inPane.style.display = &#x27;none&#x27;; outPane.classList.add(&#x27;on&#x27;); backRow.style.display = &#x27;block&#x27;;
+  }
+  const h = card.offsetHeight, w = card.offsetWidth;
+  if (!wasOut) {
+    [&#x27;out-hypothesis&#x27;, &#x27;out-person&#x27;, &#x27;out-next&#x27;, &#x27;out-kill&#x27;].forEach((id, i) =&gt; document.getElementById(id).textContent = saved[i]);
+    inPane.style.display = &#x27;&#x27;; outPane.classList.remove(&#x27;on&#x27;); backRow.style.display = &#x27;none&#x27;;
+  }
+  const z = Math.max(1, Math.min((innerHeight - 56) / h, (innerWidth * 0.86) / w, 2.6));
+  card.style.zoom = z.toFixed(3);
+}
+window.addEventListener(&#x27;resize&#x27;, fitCard);
+if (document.fonts &amp;&amp; document.fonts.ready) document.fonts.ready.then(fitCard);
+fitCard();
 
 window.addEventListener(&#x27;keydown&#x27;, (e) =&gt; {
   if ([&#x27;ArrowDown&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowLeft&#x27;].includes(e.key))
